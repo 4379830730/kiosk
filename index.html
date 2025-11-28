@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brantford Transit Kiosk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
     <style>
         /* --- 1. 全局配置 --- */
         :root {
@@ -25,13 +29,15 @@
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            /* 修正：使用 Inter 字体 */
+            font-family: 'Inter', sans-serif;
             overflow: hidden; 
         }
         
         #app {
-            width: 1024px; 
-            height: 768px;
+            /* 修正：屏幕尺寸 851 x 539 */
+            width: 851px; 
+            height: 539px;
             background-color: var(--bg-blue);
             position: relative;
             overflow: hidden;
@@ -43,200 +49,203 @@
 
         .hidden { display: none !important; }
         
-        /* 顶部通知条 - 字号加大，高度加高 */
+        /* 顶部通知条 */
         .top-banner { 
             background-color: var(--yellow); 
             color: #000; 
             text-align: center; 
-            padding: 20px 0; /* 增加上下内边距 */
+            padding: 10px 0; /* 稍微调小以适应小屏幕 */
             font-weight: 700; 
-            font-size: 26px; /* 字号加大 */
+            font-size: 16px; 
             width: 100%; 
             z-index: 10;
-            line-height: 1.2;
         }
 
         /* --- Logo 区域 --- */
         .header-section { text-align: center; color: white; position: relative; }
         
-        /* Logo 图片 - 尺寸加大 */
+        /* Logo 图片 - 精确尺寸 */
         .logo-img { 
-            height: 110px; /* 从80px加大到110px */
-            width: auto; 
-            margin-bottom: 20px; 
+            width: 150px; 
+            height: 38.67px; 
+            object-fit: contain; /* 保持比例 */
+            margin-bottom: 10px; 
         }
         
-        .logo-text-backup { display: none; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        .logo-text-backup { display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px; }
         .logo-text-group { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-        .logo-small { font-size: 20px; font-weight: 500; letter-spacing: 1px; }
-        .logo-big { font-size: 40px; font-weight: 900; letter-spacing: 1px; }
-        .logo-icon { font-size: 48px; }
+        .logo-small { font-size: 12px; font-weight: 600; letter-spacing: 1px; }
+        .logo-big { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+        .logo-icon { font-size: 28px; }
         
-        /* 副标题 - 字号加大 */
+        /* 副标题 - 精确参数 */
         .subtitle { 
-            margin-top: 20px; 
-            font-size: 30px; /* 从20px加大到30px */
-            font-weight: 500; 
+            margin-top: 15px; 
+            font-size: 18px; 
+            font-weight: 600; /* Semi Bold */
             opacity: 1; 
         }
 
         /* 按钮基础 */
-        .btn { border: none; cursor: pointer; transition: 0.1s; font-weight: 700; outline: none; }
+        .btn { border: none; cursor: pointer; transition: 0.1s; font-weight: 600; outline: none; }
         .btn:active { transform: scale(0.96); }
 
         /* =========================================
-           PAGE 1: 语言页 (完全居中布局)
+           PAGE 1: 语言页 (严格还原)
            ========================================= */
         #page-lang { 
             flex: 1; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            justify-content: center; /* 关键：垂直完全居中 */
-            padding-bottom: 50px; /* 稍微向上提一点点视觉重心 */
+            padding-top: 60px; /* 调整垂直位置 */
         }
         
         .lang-grid { 
             display: grid; 
-            grid-template-columns: repeat(3, 240px); /* 按钮宽度加大 */
-            gap: 40px; /* 间距加大 */
-            margin-top: 60px; /* 与文字的距离加大 */
+            /* 修正：列宽适应按钮宽度 */
+            grid-template-columns: repeat(3, 157px); 
+            gap: 25px; /* 间距 */
+            margin-top: 40px; 
         }
         
         .lang-btn { 
-            height: 90px; /* 按钮高度加大 */
+            width: 157px;
+            height: 38px; 
             background: white; 
             color: black; 
-            font-size: 32px; /* 字体加大 */
-            font-weight: bold;
-            border-radius: 12px; /* 圆角稍微大一点 */
-            border: 3px solid transparent; 
+            font-size: 16px; 
+            font-weight: 600; /* Semi Bold */
+            border-radius: 6px; 
+            border: 2px solid transparent; 
+            /* Flex 居中文字 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .lang-btn.active, .lang-btn:hover { 
             background-color: var(--yellow); 
-            border-color: white; /* 选中时加个白边更有质感 */
+            border-color: white; 
             transform: scale(1.02); 
         }
 
         /* =========================================
-           PAGE 2: Search (保持原有样式)
+           PAGE 2: Search (适配 851宽度)
            ========================================= */
-        #page-search { flex:1; display:flex; flex-direction:column; align-items:center; position: relative; }
-        .top-right-lang-btn { position: absolute; top: 20px; right: 30px; background: white; color: black; padding: 8px 20px; border-radius: 6px; font-weight: bold; font-size: 14px; }
-        .search-bar-wrapper { width: 800px; background: #f0f0f0; border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .search-icon { font-size: 24px; color: #666; margin-right: 15px; }
-        .mic-icon { font-size: 24px; color: #666; margin-left: 15px; cursor: pointer;}
-        #search-input { flex: 1; background: transparent; border: none; font-size: 24px; outline: none; color: #333; }
-        .search-btn-center { background: var(--yellow); padding: 15px 50px; border-radius: 8px; font-size: 20px; margin-top: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 0px rgba(0,0,0,0.2); }
-        .keyboard-container { width: 920px; margin-top: auto; margin-bottom: 15px; padding: 10px; }
-        .kb-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 8px; }
-        .key { width: 65px; height: 60px; background: white; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 24px; color: #333; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
+        #page-search { flex:1; display:flex; flex-direction:column; align-items:center; position: relative; padding-top: 20px;}
+        .top-right-lang-btn { position: absolute; top: 15px; right: 20px; background: white; color: black; padding: 6px 15px; border-radius: 4px; font-weight: 600; font-size: 12px; }
+        
+        .search-bar-wrapper { 
+            width: 600px; /* 缩小适应新屏幕 */
+            background: #f0f0f0; border-radius: 8px; padding: 8px 15px; 
+            display: flex; align-items: center; margin-top: 15px; 
+            box-shadow: 0 3px 5px rgba(0,0,0,0.1); 
+        }
+        .search-icon { font-size: 20px; color: #666; margin-right: 10px; }
+        .mic-icon { font-size: 20px; color: #666; margin-left: 10px; cursor: pointer;}
+        #search-input { flex: 1; background: transparent; border: none; font-size: 20px; outline: none; color: #333; font-family: 'Inter'; }
+        
+        .search-btn-center { 
+            background: var(--yellow); padding: 10px 40px; border-radius: 6px; font-size: 18px; 
+            margin-top: 15px; margin-bottom: 15px; 
+            display: flex; align-items: center; gap: 8px; box-shadow: 0 3px 0px rgba(0,0,0,0.2); 
+        }
+        
+        /* 键盘缩小适配 */
+        .keyboard-container { width: 750px; margin-top: auto; margin-bottom: 10px; padding: 5px; }
+        .kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
+        .key { 
+            width: 55px; height: 50px; /* 缩小按键 */
+            background: white; border-radius: 5px; 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 20px; color: #333; box-shadow: 0 2px 3px rgba(0,0,0,0.3); cursor: pointer; 
+        }
         .key:active { background: #eee; transform: translateY(2px); }
-        .key-num { height: 50px; background: #f7f9fc; color: #1a3b8e; font-weight: bold;}
-        .key-action-blue { background: #1877f2; color: white; width: 100px; font-size: 28px; }
-        .key-gray { background: #d0d3d9; width: 50px; font-size: 16px;}
-        .key-space { flex: 1; max-width: 400px; }
-        .key-backspace { width: 80px; background: #d0d3d9; }
+        .key-num { height: 40px; background: #f7f9fc; color: #1a3b8e; font-weight: bold; font-size: 18px;}
+        .key-action-blue { background: #1877f2; color: white; width: 80px; font-size: 22px; }
+        .key-gray { background: #d0d3d9; width: 40px; font-size: 14px;}
+        .key-space { flex: 1; max-width: 300px; }
+        .key-backspace { width: 60px; background: #d0d3d9; }
 
 
-        /* PAGE 3: Details */
+        /* =========================================
+           PAGE 3: Details (适配 851x539)
+           ========================================= */
         #page-details { background: white; flex: 1; display: flex; flex-direction: column; position: relative; }
-        .details-top-bar { display: flex; padding: 25px 35px 0; align-items: center; background: white; }
-        .route-tab { padding: 10px 40px; border-radius: 8px; font-size: 20px; font-weight: bold; margin-right: 20px; background-color: var(--tab-gray); color: #0a1035; min-width: 140px;}
+        .details-top-bar { display: flex; padding: 15px 20px 0; align-items: center; background: white; }
+        .route-tab { 
+            padding: 8px 30px; 
+            border-radius: 6px; 
+            font-size: 16px; font-weight: 600; 
+            margin-right: 15px; 
+            background-color: var(--tab-gray); color: #0a1035; 
+            min-width: 100px;
+        }
         .route-tab.active { background-color: var(--yellow); }
-        .lang-switch-btn { margin-left: auto; background: var(--btn-blue); color: white; padding: 10px 25px; border-radius: 8px; font-size: 18px; }
+        .lang-switch-btn { margin-left: auto; background: var(--btn-blue); color: white; padding: 8px 20px; border-radius: 6px; font-size: 14px; }
 
-        .details-content { display: flex; flex: 1; padding: 30px 35px 35px 35px; gap: 40px; }
+        .details-content { display: flex; flex: 1; padding: 20px; gap: 20px; }
         .left-panel { flex: 63; display: flex; flex-direction: column; }
 
-        .top-info-block { display: flex; gap: 20px; margin-bottom: 40px; height: 150px; }
+        .top-info-block { display: flex; gap: 15px; margin-bottom: 20px; height: 100px; }
         
         .bus-name-box { 
             flex: 4; 
             background: var(--bg-beige); 
-            border-radius: 12px; 
+            border-radius: 8px; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            font-size: 54px; 
-            font-weight: bold; 
+            font-size: 42px; /* 适配小屏 */
+            font-weight: 700; 
             color: var(--text-dark); 
         }
         
         .bus-times-col { flex: 6; display: flex; flex-direction: column; justify-content: space-between; }
-        .time-row { background: var(--bg-beige); height: 47%; border-radius: 12px; display: flex; align-items: center; padding-left: 20px; font-size: 20px; color: #000; }
+        .time-row { background: var(--bg-beige); height: 47%; border-radius: 8px; display: flex; align-items: center; padding-left: 15px; font-size: 16px; color: #000; font-weight: 500;}
 
-        .route-block { margin-bottom: 30px; }
-        .labels-row { display: flex; justify-content: space-between; padding: 0 5px; margin-bottom: 8px; font-size: 22px; font-weight: bold; color: var(--btn-blue); }
+        .route-block { margin-bottom: 20px; }
+        .labels-row { display: flex; justify-content: space-between; padding: 0 5px; margin-bottom: 5px; font-size: 18px; font-weight: 600; color: var(--btn-blue); }
         .labels-row span:last-child { width: 42%; }
         .inputs-row { display: flex; align-items: center; justify-content: space-between; }
-        .location-field { width: 42%; background: var(--bg-beige); padding: 20px; border-radius: 12px; font-size: 18px; font-weight: 500; color: #000; }
-        .stops-middle { text-align: center; font-weight: bold; font-size: 16px; display: flex; flex-direction: column; align-items: center; }
-        .stops-underline { width: 50px; height: 2px; background: #000; margin-top: 4px; }
+        .location-field { width: 42%; background: var(--bg-beige); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #000; }
+        .stops-middle { text-align: center; font-weight: 600; font-size: 14px; display: flex; flex-direction: column; align-items: center; }
+        .stops-underline { width: 40px; height: 2px; background: #000; margin-top: 2px; }
 
-        .info-message { background: var(--bg-beige); padding: 20px; border-radius: 12px; font-size: 20px; margin-bottom: 20px; color: #000; }
+        .info-message { background: var(--bg-beige); padding: 12px; border-radius: 8px; font-size: 16px; margin-bottom: 10px; color: #000; }
         .details-actions { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; }
-        .btn-back-pill { background: var(--btn-blue); color: white; padding: 12px 60px; border-radius: 50px; font-size: 20px; }
-        .btn-print-rect { background: var(--btn-blue); color: white; padding: 18px 70px; border-radius: 10px; font-size: 26px; }
+        .btn-back-pill { background: var(--btn-blue); color: white; padding: 10px 40px; border-radius: 40px; font-size: 16px; }
+        .btn-print-rect { background: var(--btn-blue); color: white; padding: 12px 50px; border-radius: 8px; font-size: 20px; }
 
-        .right-panel { 
-            flex: 37; 
-            border: 2px solid var(--yellow); 
-            display: flex; 
-            flex-direction: column; 
-            position: relative;
-            height: 100%; 
-        }
-        
-        .map-header { 
-            background: var(--yellow); 
-            text-align: center; 
-            padding: 12px; 
-            font-size: 22px; 
-            font-weight: bold; 
-            color: black; 
-        }
-        
-        .map-area { 
-            flex: 1; 
-            position: relative; 
-            background: #eee; 
-            overflow: hidden; 
-            cursor: pointer; 
-            width: 100%; 
-        }
-        .map-area img { 
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; 
-        }
-        
-        .expand-icon { position: absolute; top: 10px; left: 10px; width: 40px; height: 40px; background: var(--btn-blue); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; z-index: 5; pointer-events: none; }
-        .btn-show-list { position: absolute; bottom: 20px; left: 5%; width: 90%; background: var(--btn-blue); color: white; padding: 15px; font-size: 18px; border-radius: 8px; z-index: 10; }
+        .right-panel { flex: 37; border: 2px solid var(--yellow); display: flex; flex-direction: column; position: relative; height: 100%; }
+        .map-header { background: var(--yellow); text-align: center; padding: 8px; font-size: 18px; font-weight: 700; color: black; }
+        .map-area { flex: 1; position: relative; background: #eee; overflow: hidden; cursor: pointer; width: 100%; }
+        .map-area img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .expand-icon { position: absolute; top: 8px; left: 8px; width: 30px; height: 30px; background: var(--btn-blue); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; z-index: 5; pointer-events: none; }
+        .btn-show-list { position: absolute; bottom: 15px; left: 5%; width: 90%; background: var(--btn-blue); color: white; padding: 10px; font-size: 14px; border-radius: 6px; z-index: 10; }
 
         /* List View */
-        .list-view-container { background: white; flex: 1; padding: 20px 20px 20px 10px; overflow-y: auto; }
-        .stop-item { display: flex; margin-bottom: 18px; position: relative; align-items: center; }
-        .stop-time { font-weight: 500; width: 50px; text-align: right; margin-right: 15px; color: #333; font-size: 14px;}
-        .stop-line { position: absolute; left: 72px; top: 20px; bottom: -25px; width: 2px; background: #5572a5; z-index: 1;}
+        .list-view-container { background: white; flex: 1; padding: 15px 10px; overflow-y: auto; }
+        .stop-item { display: flex; margin-bottom: 12px; position: relative; align-items: center; }
+        .stop-time { font-weight: 500; width: 40px; text-align: right; margin-right: 10px; color: #333; font-size: 12px;}
+        .stop-line { position: absolute; left: 58px; top: 15px; bottom: -20px; width: 2px; background: #5572a5; z-index: 1;}
         .stop-item:last-child .stop-line { display: none; }
-        .stop-dot-small { width: 8px; height: 8px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: 3px; }
-        .stop-dot-large { width: 16px; height: 16px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: -1px; }
-        .stop-name { margin-left: 15px; font-size: 15px; color: #333; line-height: 1.2; }
-        .stop-highlight { font-weight: bold; font-size: 16px; color: black; }
-        .stop-end { font-weight: bold; font-size: 18px; color: var(--purple-end); }
+        .stop-dot-small { width: 6px; height: 6px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: 3px; }
+        .stop-dot-large { width: 12px; height: 12px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: 0px; }
+        .stop-name { margin-left: 10px; font-size: 13px; color: #333; line-height: 1.2; }
+        .stop-highlight { font-weight: 700; font-size: 14px; color: black; }
+        .stop-end { font-weight: 700; font-size: 15px; color: var(--purple-end); }
 
         /* Modal & Print */
         .modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; justify-content: center; align-items: center; }
         .modal-body { width: 90%; height: 90%; background: white; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 10px; background: var(--btn-blue); color: white; padding: 10px 20px; border-radius: 5px; z-index: 200; }
+        .close-btn { position: absolute; top: 10px; right: 10px; background: var(--btn-blue); color: white; padding: 8px 20px; border-radius: 5px; z-index: 200; font-size: 14px;}
         .center-screen { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;}
-        .loader { border: 6px solid rgba(255,255,255,0.3); border-top: 6px solid var(--yellow); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin-bottom: 30px; }
+        .loader { border: 6px solid rgba(255,255,255,0.3); border-top: 6px solid var(--yellow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Printing Text */
-        #text-printing, #text-wait { font-size: 32px; font-weight: bold; margin: 0; }
-        #text-wait { margin-top: 20px; }
+        #text-printing, #text-wait { font-size: 28px; font-weight: 700; margin: 0; }
+        #text-wait { margin-top: 15px; }
 
     </style>
 </head>
@@ -339,7 +348,7 @@
                          <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Assumption College</div></div>
                          <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Shellard Ln at Sinden Rd</div></div>
                          <div class="stop-item"><div class="stop-time">15:30</div><div class="stop-dot-large"></div><div class="stop-name stop-end">Edmondson St</div></div>
-                         <button class="btn btn-back-pill" style="width:100%; margin-top:20px; font-size:16px; padding:10px;" onclick="toggleMapList('map')" id="btn-back-map">Back to Map</button>
+                         <button class="btn btn-back-pill" style="width:100%; margin-top:10px; font-size:14px; padding:8px;" onclick="toggleMapList('map')" id="btn-back-map">Back to Map</button>
                     </div>
                 </div>
             </div>
@@ -378,9 +387,11 @@
         const langCodes = ['en', 'fr', 'zh', 'es', 'pa', 'tl'];
         let langIndex = 0; 
 
+        // 缩放逻辑 (851x539)
         function fitToScreen() {
             const app = document.getElementById('app');
-            const targetW = 1024; const targetH = 768;
+            const targetW = 851; 
+            const targetH = 539;
             const scaleX = window.innerWidth / targetW;
             const scaleY = window.innerHeight / targetH;
             const scale = Math.min(scaleX, scaleY) * 0.95;
