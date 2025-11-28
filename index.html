@@ -43,30 +43,85 @@
 
         .hidden { display: none !important; }
         
-        .top-banner { background-color: var(--yellow); color: #000; text-align: center; padding: 12px; font-weight: 700; font-size: 18px; width: 100%; z-index: 10; }
+        /* 顶部通知条 - 字号加大，高度加高 */
+        .top-banner { 
+            background-color: var(--yellow); 
+            color: #000; 
+            text-align: center; 
+            padding: 20px 0; /* 增加上下内边距 */
+            font-weight: 700; 
+            font-size: 26px; /* 字号加大 */
+            width: 100%; 
+            z-index: 10;
+            line-height: 1.2;
+        }
 
         /* --- Logo 区域 --- */
-        .header-section { text-align: center; padding-top: 20px; color: white; position: relative; }
-        .logo-img { height: 80px; width: auto; margin-bottom: 10px; }
+        .header-section { text-align: center; color: white; position: relative; }
+        
+        /* Logo 图片 - 尺寸加大 */
+        .logo-img { 
+            height: 110px; /* 从80px加大到110px */
+            width: auto; 
+            margin-bottom: 20px; 
+        }
+        
         .logo-text-backup { display: none; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         .logo-text-group { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-        .logo-small { font-size: 16px; font-weight: 500; letter-spacing: 1px; }
-        .logo-big { font-size: 32px; font-weight: 900; letter-spacing: 1px; }
-        .logo-icon { font-size: 36px; }
-        .subtitle { margin-top: 5px; font-size: 18px; font-weight: 400; opacity: 0.9; }
+        .logo-small { font-size: 20px; font-weight: 500; letter-spacing: 1px; }
+        .logo-big { font-size: 40px; font-weight: 900; letter-spacing: 1px; }
+        .logo-icon { font-size: 48px; }
+        
+        /* 副标题 - 字号加大 */
+        .subtitle { 
+            margin-top: 20px; 
+            font-size: 30px; /* 从20px加大到30px */
+            font-weight: 500; 
+            opacity: 1; 
+        }
 
         /* 按钮基础 */
         .btn { border: none; cursor: pointer; transition: 0.1s; font-weight: 700; outline: none; }
         .btn:active { transform: scale(0.96); }
 
-        /* PAGE 1: Language */
-        #page-lang { flex:1; display:flex; flex-direction:column; align-items:center; }
-        .lang-grid { display: grid; grid-template-columns: repeat(3, 200px); gap: 25px; margin-top: 60px; }
-        .lang-btn { height: 65px; background: white; color: black; font-size: 20px; border-radius: 8px; border: 2px solid transparent; }
-        /* 键盘选中状态样式 */
-        .lang-btn.active, .lang-btn:hover { background-color: var(--yellow); border-color: white; transform: scale(1.02); }
+        /* =========================================
+           PAGE 1: 语言页 (完全居中布局)
+           ========================================= */
+        #page-lang { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; /* 关键：垂直完全居中 */
+            padding-bottom: 50px; /* 稍微向上提一点点视觉重心 */
+        }
+        
+        .lang-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 240px); /* 按钮宽度加大 */
+            gap: 40px; /* 间距加大 */
+            margin-top: 60px; /* 与文字的距离加大 */
+        }
+        
+        .lang-btn { 
+            height: 90px; /* 按钮高度加大 */
+            background: white; 
+            color: black; 
+            font-size: 32px; /* 字体加大 */
+            font-weight: bold;
+            border-radius: 12px; /* 圆角稍微大一点 */
+            border: 3px solid transparent; 
+        }
+        
+        .lang-btn.active, .lang-btn:hover { 
+            background-color: var(--yellow); 
+            border-color: white; /* 选中时加个白边更有质感 */
+            transform: scale(1.02); 
+        }
 
-        /* PAGE 2: Search */
+        /* =========================================
+           PAGE 2: Search (保持原有样式)
+           ========================================= */
         #page-search { flex:1; display:flex; flex-direction:column; align-items:center; position: relative; }
         .top-right-lang-btn { position: absolute; top: 20px; right: 30px; background: white; color: black; padding: 8px 20px; border-radius: 6px; font-weight: bold; font-size: 14px; }
         .search-bar-wrapper { width: 800px; background: #f0f0f0; border-radius: 12px; padding: 10px 20px; display: flex; align-items: center; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
@@ -190,7 +245,7 @@
     <div id="app">
         <div class="top-banner" id="text-banner">Announcement in progress, Bus 4A is leaving in 2 minutes</div>
 
-        <div id="page-lang" class="center-screen" style="justify-content: flex-start;">
+        <div id="page-lang">
             <div class="header-section">
                 <img src="logo.png" class="logo-img" alt="Brantford Transit" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
                 <div class="logo-text-backup logo-container"><div class="logo-text-group"><span class="logo-small">Brantford</span><span class="logo-big">TRANSIT</span></div><span class="logo-icon">🚌</span></div>
@@ -321,9 +376,7 @@
         };
 
         const langCodes = ['en', 'fr', 'zh', 'es', 'pa', 'tl'];
-        let langIndex = 0; // 当前选中的语言索引
-
-        // --- 功能逻辑 ---
+        let langIndex = 0; 
 
         function fitToScreen() {
             const app = document.getElementById('app');
@@ -336,23 +389,19 @@
         window.addEventListener('resize', fitToScreen);
         window.addEventListener('load', fitToScreen);
 
-        // 仅更新文字，不跳转
         function applyTranslations(lang) {
             const t = translations[lang];
             const ids = { 'text-banner': t.banner, 'text-lang-subtitle': t.langSubtitle, 'text-search-subtitle': t.searchSubtitle, 'btn-search': t.searchBtn, 'lbl-duration': t.duration, 'lbl-arrives': t.arrives, 'lbl-from': t.from, 'lbl-to': t.to, 'lbl-stop-after': t.stopAfter, 'lbl-dest': t.dest, 'btn-back': t.back, 'btn-print': t.print, 'btn-show-list': t.showList, 'btn-back-map': t.backMap, 'btn-modal-back': t.back, 'text-printing': t.printing, 'text-wait': t.wait, 'text-success': t.success, 'btn-finish': t.finish };
             for(let id in ids) document.getElementById(id).innerText = ids[id];
         }
 
-        // 选中语言并跳转
         function selectLang(lang) {
             applyTranslations(lang);
-            // 更新当前索引以匹配点击
             langIndex = langCodes.indexOf(lang);
             updateLangHighlight();
             goToSearch();
         }
 
-        // 高亮更新逻辑
         function updateLangHighlight() {
             const btns = document.querySelectorAll('.lang-grid .lang-btn');
             btns.forEach((b, i) => {
@@ -366,17 +415,13 @@
         function goToDetails() { show('page-details'); }
         function goPrint() { show('page-print'); setTimeout(() => { show('page-success'); }, 3000); }
         
-        // 重置逻辑：回到主页并恢复英语
         function reset() { 
             document.getElementById('search-input').value = ''; 
             switchRoute(1); 
             toggleMapList('map'); 
-            
-            // 关键：重置回英语，并重置选中状态
             applyTranslations('en');
             langIndex = 0;
             updateLangHighlight();
-            
             show('page-lang'); 
         }
         
@@ -387,9 +432,7 @@
             i.focus(); 
         }
 
-        // --- 全局键盘监听 (核心修改) ---
         document.addEventListener('keydown', (e) => {
-            // 1. 语言页：方向键控制
             if (!document.getElementById('page-lang').classList.contains('hidden')) {
                 if (e.key === 'ArrowRight') { langIndex = (langIndex + 1) % 6; updateLangHighlight(); }
                 if (e.key === 'ArrowLeft') { langIndex = (langIndex - 1 + 6) % 6; updateLangHighlight(); }
@@ -398,23 +441,18 @@
                 if (e.key === 'Enter') { selectLang(langCodes[langIndex]); }
                 return;
             }
-
-            // 2. 搜索页：回车跳转
             if (!document.getElementById('page-search').classList.contains('hidden')) {
                 const input = document.getElementById('search-input');
                 input.focus();
                 if (e.key === 'Enter') goToDetails();
                 return;
             }
-
-            // 3. 详情页：P键打印
             if (!document.getElementById('page-details').classList.contains('hidden')) {
                 if (e.key === 'p' || e.key === 'P') goPrint();
                 return;
             }
         });
 
-        // 路线切换逻辑
         let currentRoute = 1;
         function switchRoute(routeNum) {
             if (currentRoute === routeNum) return; 
