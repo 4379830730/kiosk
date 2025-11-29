@@ -91,7 +91,9 @@
             width: 1400px; height: 85px; background: #f0f0f0; border-radius: 85px;
             display: flex; align-items: center; padding: 0 35px; margin-bottom: 40px;
         }
-        .search-icon { font-size: 36px; color: #666; margin-right: 25px; }
+        .search-icon-img { 
+            width: 36px; height: 36px; object-fit: contain; margin-right: 25px; 
+        }
         #search-input { 
             flex: 1; height: 100%; border: none; background: transparent; 
             font-size: 32px; font-weight: 400; outline: none; color: #333; font-family: 'Inter';
@@ -126,7 +128,6 @@
 
         /* --- Page 3: 信息页 --- */
         #page-details { flex: 1; background: var(--bg-blue); display: flex; padding: 40px; gap: 40px; }
-        /* 修改：移除了 border-radius */
         .info-card {
             flex: 1; background: white; border-radius: 0px; padding: 40px;
             display: flex; flex-direction: column;
@@ -206,13 +207,13 @@
         .map-view-container { flex: 1; position: relative; overflow: hidden; background: #eee;}
         .map-img-fit { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 修改：地图放大图标样式，大小调整为 58*58 */
+        /* 修改：地图放大图标样式，精确尺寸 47x48 */
         .map-expand-icon {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 58px; 
-            height: 58px;
+            width: 47px; 
+            height: 48px;
             z-index: 10;
             pointer-events: none; 
         }
@@ -278,7 +279,7 @@
                 <div class="p2-subtitle" id="text-search-sub">Enter your destination to see which bus to take<br>and where to board.</div>
                 
                 <div class="search-container">
-                    <span class="search-icon">🔍</span>
+                    <img src="search_icon.png" class="search-icon-img" alt="Search">
                     <input type="text" id="search-input" autofocus>
                 </div>
 
@@ -443,7 +444,6 @@
         // --- 核心配置 ---
         const translations = {
             'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
-            // 修改：更新了中文的 "从" 和 "到" 的翻译
             'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点站", to: "目的站", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
             'fr': { banner: "Annonce : Le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
             'es': { banner: "Anuncio: El autobús 4A sale en 2 minutos", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
