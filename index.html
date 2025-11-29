@@ -206,15 +206,15 @@
         .map-view-container { flex: 1; position: relative; overflow: hidden; background: #eee;}
         .map-img-fit { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 新增：地图放大图标样式 */
+        /* 修改：地图放大图标样式，大小调整为 58*58 */
         .map-expand-icon {
             position: absolute;
             top: 10px;
             right: 10px;
-            width: 44px; /* 根据你的PNG大小调整 */
-            height: 44px;
+            width: 58px; 
+            height: 58px;
             z-index: 10;
-            pointer-events: none; /* 让点击事件穿透到下方的地图容器 */
+            pointer-events: none; 
         }
 
         .btn-show-list-float {
@@ -280,7 +280,7 @@
                 <div class="search-container">
                     <span class="search-icon">🔍</span>
                     <input type="text" id="search-input" autofocus>
-                    </div>
+                </div>
 
                 <button class="btn-search-main" onclick="goToDetails()" id="btn-search">Search Route ➜</button>
             </div>
@@ -443,7 +443,8 @@
         // --- 核心配置 ---
         const translations = {
             'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
-            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "从", to: "到", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
+            // 修改：更新了中文的 "从" 和 "到" 的翻译
+            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点站", to: "目的站", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
             'fr': { banner: "Annonce : Le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
             'es': { banner: "Anuncio: El autobús 4A sale en 2 minutos", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
             'pa': { banner: "ਘੋਸ਼ਣਾ: ਬੱਸ 4A 2 ਮਿੰਟਾਂ ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ", searchBtn: "ਖੋਜ ➜", dur: "ਸਮਾਂ:", arr: "ਪਹੁੰਚਣਾ:", from: "ਤੋਂ", to: "ਨੂੰ", after: "ਬਾਅਦ ਵਿੱਚ", dest: "ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ", list: "ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ", printing: "ਪ੍ਰਿੰਟ ਹੋ ਰਿਹਾ ਹੈ", wait: "ਉਡੀਕ ਕਰੋ", coming: "ਬੱਸ ਆ ਰਹੀ ਹੈ!" },
