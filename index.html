@@ -70,7 +70,6 @@
             font-size: 40px; font-weight: 600; border-radius: 12px; border: none;
             transition: 0.1s; display: flex; justify-content: center; align-items: center;
         }
-        /* 键盘选中高亮 */
         .lang-btn.active, .lang-btn:hover { background-color: var(--yellow); transform: scale(1.02); border: 4px solid white;}
 
         /* --- Page 2: 搜索页 --- */
@@ -82,8 +81,7 @@
             font-size: 24px; font-weight: 600; border-radius: 55px; border: none;
         }
         .p2-center-content {
-            margin-top: 120px; /* 稍微上移留给5行键盘空间 */
-            display: flex; flex-direction: column; align-items: center; width: 100%; flex: 1;
+            margin-top: 120px; display: flex; flex-direction: column; align-items: center; width: 100%; flex: 1;
         }
         .p2-subtitle {
             font-size: 36px; font-weight: 600; color: white;
@@ -105,13 +103,12 @@
             display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: auto; 
         }
         
-        /* 键盘 (5行布局) */
+        /* 键盘 */
         .keyboard-wrapper {
             width: 100%; background: var(--kb-bg); padding: 20px 40px 30px 40px;
             display: flex; flex-direction: column; gap: 12px; justify-content: flex-end;
         }
         .kb-row { display: flex; justify-content: center; gap: 12px; }
-        /* 按键稍微变矮一点以适应5行 */
         .key {
             width: 120px; height: 85px; background: var(--key-white);
             border-radius: 10px; border: none;
@@ -120,7 +117,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: 0.1s;
         }
         .key:active { background: #f0f0f0; transform: scale(0.98); }
-        .key-num-small { font-size: 24px; color: #666; margin-bottom: -5px; } /* QWERTY 上的小数字 */
+        .key-num-small { font-size: 24px; color: #666; margin-bottom: -5px; }
         .key-func { background: var(--key-gray); }
         .key-enter { width: 252px; background: var(--key-blue); color: white; }
         .key-space { flex: 1; max-width: 900px; }
@@ -129,8 +126,9 @@
 
         /* --- Page 3: 信息页 --- */
         #page-details { flex: 1; background: var(--bg-blue); display: flex; padding: 40px; gap: 40px; }
+        /* 修改：移除了 border-radius */
         .info-card {
-            flex: 1; background: white; border-radius: 20px; padding: 40px;
+            flex: 1; background: white; border-radius: 0px; padding: 40px;
             display: flex; flex-direction: column;
         }
         .card-header-row { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
@@ -172,7 +170,6 @@
             text-align: center; font-size: 24px; font-weight: 700;
             display: flex; flex-direction: column; align-items: center; width: 16%;
         }
-        /* 修正：线短一点 */
         .line-arrow-graphic {
             width: 60px; height: 3px; background: black; margin-top: 8px; position: relative;
         }
@@ -208,6 +205,18 @@
         }
         .map-view-container { flex: 1; position: relative; overflow: hidden; background: #eee;}
         .map-img-fit { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* 新增：地图放大图标样式 */
+        .map-expand-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 44px; /* 根据你的PNG大小调整 */
+            height: 44px;
+            z-index: 10;
+            pointer-events: none; /* 让点击事件穿透到下方的地图容器 */
+        }
+
         .btn-show-list-float {
             position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
             width: 90%; height: 80px; background: var(--btn-blue);
@@ -215,26 +224,15 @@
             border-radius: 15px; border: none;
         }
 
-        /* Bus List Styling (Detailed Fix) */
+        /* Bus List Styling */
         .list-container { background: white; flex: 1; padding: 30px 20px; overflow-y: auto; }
-        .stop-row { 
-            display: flex; margin-bottom: 25px; align-items: center; 
-            min-height: 40px; position: relative;
-        }
+        .stop-row { display: flex; margin-bottom: 25px; align-items: center; min-height: 40px; position: relative; }
         .stop-time { width: 80px; font-size: 20px; font-weight: 500; text-align: right; margin-right: 20px; color: #333; flex-shrink: 0;}
-        
-        /* dots alignment column */
         .stop-visual { width: 40px; display: flex; justify-content: center; position: relative; }
-        
         .stop-dot-big { width: 31px; height: 31px; border-radius: 50%; background: var(--yellow); z-index: 2; }
         .stop-dot-small { width: 16px; height: 16px; border-radius: 50%; background: var(--yellow); z-index: 2; }
-        
-        .stop-line-v { 
-            position: absolute; top: 30px; bottom: -35px; left: 50%; transform: translateX(-50%);
-            width: 4px; background: #ccc; z-index: 1; 
-        }
+        .stop-line-v { position: absolute; top: 30px; bottom: -35px; left: 50%; transform: translateX(-50%); width: 4px; background: #ccc; z-index: 1; }
         .stop-row:last-child .stop-line-v { display: none; }
-
         .stop-text-bold { font-size: 24px; font-weight: 700; color: black; margin-left: 15px; }
         .stop-text-reg { font-size: 20px; font-weight: 400; color: #333; margin-left: 15px; }
 
@@ -242,22 +240,13 @@
         .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; justify-content: center; align-items: center; }
         .modal-box { width: 1700px; height: 1000px; background: white; position: relative; }
         .btn-modal-back { position: absolute; top: 30px; right: 30px; width: 180px; height: 50px; background: var(--btn-blue); color: white; border-radius: 50px; font-size: 24px; font-weight: 600; border: none; z-index: 10; }
-        
         .center-msg { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background:#1a3b8e; color:white; padding-top: 50px;}
         .loader { border: 12px solid rgba(255,255,255,0.2); border-top: 12px solid var(--yellow); border-radius: 50%; width: 100px; height: 100px; animation: spin 1.5s linear infinite; margin-bottom: 50px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
         #text-printing, #text-wait { font-size: 48px; font-weight: 600; margin: 0; }
         #text-wait { margin-top: 20px; }
-        
         #text-coming { font-size: 48px; font-weight: 600; margin-bottom: 80px; margin-top: 30px;}
-        .btn-home {
-            width: 680px; height: 90px;
-            background: var(--yellow);
-            color: black;
-            font-size: 36px; font-weight: 700;
-            border-radius: 90px; border: none;
-        }
+        .btn-home { width: 680px; height: 90px; background: var(--yellow); color: black; font-size: 36px; font-weight: 700; border-radius: 90px; border: none; }
 
     </style>
 </head>
@@ -291,8 +280,7 @@
                 <div class="search-container">
                     <span class="search-icon">🔍</span>
                     <input type="text" id="search-input" autofocus>
-                    <span class="mic-icon" style="font-size: 36px; color:#666;"></span>
-                </div>
+                    </div>
 
                 <button class="btn-search-main" onclick="goToDetails()" id="btn-search">Search Route ➜</button>
             </div>
@@ -409,6 +397,7 @@
                 <div id="header-map" class="map-header-bar">Bus A</div>
                 <div id="map-view" class="map-view-container" onclick="openModal()">
                     <img id="img-map-sm" class="map-img-fit" src="map_route1.jpg" alt="Map">
+                    <img src="expand_icon.png" class="map-expand-icon" alt="Expand">
                     <button class="btn-show-list-float" id="btn-list" onclick="event.stopPropagation(); toggleList()">Show Bus Line List</button>
                 </div>
                 <div id="list-view" class="list-container hidden">
@@ -454,7 +443,7 @@
         // --- 核心配置 ---
         const translations = {
             'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
-            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点", to: "目的地", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
+            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "从", to: "到", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
             'fr': { banner: "Annonce : Le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
             'es': { banner: "Anuncio: El autobús 4A sale en 2 minutos", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
             'pa': { banner: "ਘੋਸ਼ਣਾ: ਬੱਸ 4A 2 ਮਿੰਟਾਂ ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ", searchBtn: "ਖੋਜ ➜", dur: "ਸਮਾਂ:", arr: "ਪਹੁੰਚਣਾ:", from: "ਤੋਂ", to: "ਨੂੰ", after: "ਬਾਅਦ ਵਿੱਚ", dest: "ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ", list: "ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ", printing: "ਪ੍ਰਿੰਟ ਹੋ ਰਿਹਾ ਹੈ", wait: "ਉਡੀਕ ਕਰੋ", coming: "ਬੱਸ ਆ ਰਹੀ ਹੈ!" },
@@ -477,7 +466,7 @@
             const t = translations[code];
             document.getElementById('text-banner').innerText = t.banner;
             document.getElementById('text-lang-sub').innerText = t.langSubtitle;
-            document.getElementById('text-search-sub').innerHTML = t.searchSubtitle; // use innerHTML for <br>
+            document.getElementById('text-search-sub').innerHTML = t.searchSubtitle; 
             document.getElementById('btn-search').innerText = t.searchBtn;
             
             document.getElementById('lbl-dur').innerText = t.dur;
