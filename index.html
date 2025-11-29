@@ -6,246 +6,258 @@
     <title>Brantford Transit Kiosk</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         /* --- 1. 全局配置 --- */
         :root {
             --bg-blue: #1a3b8e;      
-            --bg-beige: #fff9e6;    
-            --text-dark: #0a1035;    
-            --yellow: #fecb2f;       
+            --bg-beige: #FFF9E6;
+            --text-dark: #000000;    
+            --yellow: #FFCD00; 
             --btn-blue: #1f3b8e; 
             --tab-gray: #cfd4e4;
             --purple-end: #1a1a50;
+            --kb-bg: #d1d5db;
+            --key-white: #ffffff;
+            --key-gray: #b4b8c0;
+            --key-text: #000000;
+            --key-blue: #007aff;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body { 
-            /* 背景改为纯黑，模拟机器边框 */
             background-color: #000; 
-            height: 100vh; 
-            width: 100vw;
-            margin: 0;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            height: 100vh; width: 100vw;
+            display: flex; justify-content: center; align-items: center; 
             font-family: 'Inter', sans-serif;
             overflow: hidden; 
         }
         
         #app {
-            /* 核心：固定设计尺寸 851x539 */
-            width: 851px; 
-            height: 539px;
+            width: 1920px; height: 1200px;
             background-color: var(--bg-blue);
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
             box-shadow: 0 0 50px rgba(0,0,0,0.8);
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0; 
-            /* 关键：确保缩放从中心开始 */
+            display: flex; flex-direction: column; flex-shrink: 0; 
             transform-origin: center center;
         }
 
         .hidden { display: none !important; }
+        button { cursor: pointer; outline: none; }
         
-        /* 顶部通知条 */
+        /* 顶部公告条 */
         .top-banner { 
-            background-color: var(--yellow); 
-            color: #000; 
-            text-align: center; 
-            padding: 10px 0; 
-            font-weight: 700; 
-            font-size: 16px; 
-            width: 100%; 
-            z-index: 10;
+            height: 95px; background-color: var(--yellow); color: #000; 
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 32px; 
+            width: 100%; z-index: 10; flex-shrink: 0;
         }
 
-        /* --- Logo 区域 --- */
-        .header-section { text-align: center; color: white; position: relative; }
-        
-        /* Logo 图片 - 精确尺寸 */
-        .logo-img { 
-            width: 150px; 
-            height: 38.67px; 
-            object-fit: contain; 
-            margin-bottom: 10px; 
-        }
-        
-        .logo-text-backup { display: none; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px; }
-        .logo-text-group { display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
-        .logo-small { font-size: 12px; font-weight: 600; letter-spacing: 1px; }
-        .logo-big { font-size: 24px; font-weight: 900; letter-spacing: 1px; }
-        .logo-icon { font-size: 28px; }
-        
-        /* 副标题 - 精确参数 */
-        .subtitle { 
-            margin-top: 15px; 
-            font-size: 18px; 
-            font-weight: 600; 
-            opacity: 1; 
-        }
-
-        /* 按钮基础 */
-        .btn { border: none; cursor: pointer; transition: 0.1s; font-weight: 600; outline: none; }
-        .btn:active { transform: scale(0.96); }
-
-        /* =========================================
-           PAGE 1: 语言页
-           ========================================= */
+        /* --- Page 1: 语言页 --- */
         #page-lang { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding-top: 60px; 
+            flex: 1; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center;
+            padding-bottom: 80px;
         }
-        
-        .lang-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 157px); 
-            gap: 25px; 
-            margin-top: 40px; 
-        }
-        
+        .p1-header { text-align: center; margin-bottom: 100px; }
+        .logo-img-large { width: 350px; height: 89px; object-fit: contain; margin-bottom: 50px; }
+        .subtitle-large { font-size: 36px; font-weight: 600; color: white; }
+        .lang-grid { display: grid; grid-template-columns: repeat(3, 350px); gap: 70px; }
         .lang-btn { 
-            width: 157px;
-            height: 38px; 
-            background: white; 
-            color: black; 
-            font-size: 16px; 
-            font-weight: 600; 
-            border-radius: 6px; 
-            border: 2px solid transparent; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 350px; height: 90px; background: white; color: black; 
+            font-size: 40px; font-weight: 600; border-radius: 12px; border: none;
+            transition: 0.1s; display: flex; justify-content: center; align-items: center;
+        }
+        /* 键盘选中高亮 */
+        .lang-btn.active, .lang-btn:hover { background-color: var(--yellow); transform: scale(1.02); border: 4px solid white;}
+
+        /* --- Page 2: 搜索页 --- */
+        #page-search { flex: 1; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .p2-logo { position: absolute; top: 50px; left: 70px; width: 224px; height: 57px; object-fit: contain; }
+        .btn-lang-small {
+            position: absolute; top: 50px; right: 70px;
+            width: 250px; height: 55px; background: white; color: black;
+            font-size: 24px; font-weight: 600; border-radius: 55px; border: none;
+        }
+        .p2-center-content {
+            margin-top: 120px; /* 稍微上移留给5行键盘空间 */
+            display: flex; flex-direction: column; align-items: center; width: 100%; flex: 1;
+        }
+        .p2-subtitle {
+            font-size: 36px; font-weight: 600; color: white;
+            margin-bottom: 40px; text-align: center; line-height: 1.3;
+        }
+        .search-container {
+            width: 1400px; height: 85px; background: #f0f0f0; border-radius: 85px;
+            display: flex; align-items: center; padding: 0 35px; margin-bottom: 40px;
+        }
+        .search-icon { font-size: 36px; color: #666; margin-right: 25px; }
+        #search-input { 
+            flex: 1; height: 100%; border: none; background: transparent; 
+            font-size: 32px; font-weight: 400; outline: none; color: #333; font-family: 'Inter';
+        }
+        .btn-search-main {
+            width: 450px; height: 85px; background: var(--yellow);
+            border-radius: 85px; border: none;
+            font-size: 32px; font-weight: 700; color: black;
+            display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: auto; 
         }
         
-        .lang-btn.active, .lang-btn:hover { 
-            background-color: var(--yellow); 
-            border-color: white; 
-            transform: scale(1.02); 
+        /* 键盘 (5行布局) */
+        .keyboard-wrapper {
+            width: 100%; background: var(--kb-bg); padding: 20px 40px 30px 40px;
+            display: flex; flex-direction: column; gap: 12px; justify-content: flex-end;
+        }
+        .kb-row { display: flex; justify-content: center; gap: 12px; }
+        /* 按键稍微变矮一点以适应5行 */
+        .key {
+            width: 120px; height: 85px; background: var(--key-white);
+            border-radius: 10px; border: none;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-size: 40px; color: var(--key-text); font-weight: 400;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15); transition: 0.1s;
+        }
+        .key:active { background: #f0f0f0; transform: scale(0.98); }
+        .key-num-small { font-size: 24px; color: #666; margin-bottom: -5px; } /* QWERTY 上的小数字 */
+        .key-func { background: var(--key-gray); }
+        .key-enter { width: 252px; background: var(--key-blue); color: white; }
+        .key-space { flex: 1; max-width: 900px; }
+        .key-icon { width: 36px; height: 36px; fill: var(--key-text); }
+        .key-icon-white { fill: white; }
+
+        /* --- Page 3: 信息页 --- */
+        #page-details { flex: 1; background: var(--bg-blue); display: flex; padding: 40px; gap: 40px; }
+        .info-card {
+            flex: 1; background: white; border-radius: 20px; padding: 40px;
+            display: flex; flex-direction: column;
+        }
+        .card-header-row { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
+        .tab-route {
+            width: 295px; height: 66px; background: var(--tab-gray);
+            border-radius: 10px; border: none;
+            font-size: 28px; font-weight: 600; color: black;
+        }
+        .tab-route.active { background: var(--yellow); }
+        .btn-lang-p3 {
+            width: 250px; height: 55px; background: var(--btn-blue); color: white;
+            font-size: 24px; font-weight: 600; border-radius: 55px; border: none; margin-left: auto;
         }
 
-        /* =========================================
-           PAGE 2: Search
-           ========================================= */
-        #page-search { flex:1; display:flex; flex-direction:column; align-items:center; position: relative; padding-top: 20px;}
-        .top-right-lang-btn { position: absolute; top: 15px; right: 20px; background: white; color: black; padding: 6px 15px; border-radius: 4px; font-weight: 600; font-size: 12px; }
+        .top-info-group { display: flex; gap: 40px; margin-bottom: 50px; height: 203px; }
+        .box-bus-id {
+            width: 492px; height: 203px; background: var(--bg-beige);
+            border-radius: 15px; display: flex; justify-content: center; align-items: center;
+            font-size: 64px; font-weight: 700; color: black;
+        }
+        .box-times-col { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .info-strip {
+            height: 90px; background: var(--bg-beige); border-radius: 12px;
+            display: flex; align-items: center; padding: 0 35px;
+            font-size: 28px; font-weight: 500; color: black;
+        }
+
+        .route-container { margin-bottom: 50px; }
+        .route-labels-row {
+            display: flex; justify-content: space-between;
+            font-size: 28px; font-weight: 700; color: black; margin-bottom: 10px;
+        }
+        .label-from { width: 42%; padding-left: 10px; }
+        .label-to { width: 42%; padding-left: 10px; }
+        .route-inputs-row { display: flex; align-items: center; justify-content: space-between; }
+        .input-box-loc { width: 42%; }
         
-        .search-bar-wrapper { 
-            width: 600px; 
-            background: #f0f0f0; border-radius: 8px; padding: 8px 15px; 
-            display: flex; align-items: center; margin-top: 15px; 
-            box-shadow: 0 3px 5px rgba(0,0,0,0.1); 
+        .stops-arrow-container {
+            text-align: center; font-size: 24px; font-weight: 700;
+            display: flex; flex-direction: column; align-items: center; width: 16%;
         }
-        .search-icon { font-size: 20px; color: #666; margin-right: 10px; }
-        .mic-icon { font-size: 20px; color: #666; margin-left: 10px; cursor: pointer;}
-        #search-input { flex: 1; background: transparent; border: none; font-size: 20px; outline: none; color: #333; font-family: 'Inter'; }
+        /* 修正：线短一点 */
+        .line-arrow-graphic {
+            width: 60px; height: 3px; background: black; margin-top: 8px; position: relative;
+        }
+        .line-arrow-graphic::after {
+            content: ''; position: absolute; right: 0; top: -5px;
+            border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+            border-left: 10px solid black;
+        }
+
+        .msg-spacer { margin-bottom: 25px; }
+        .action-row-bottom {
+            margin-top: auto; padding-top: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .btn-back-yellow {
+            width: 180px; height: 50px; background: var(--yellow);
+            border-radius: 50px; border: none; font-size: 24px; font-weight: 600; color: black;
+        }
+        .btn-print-blue {
+            width: 280px; height: 90px; background: var(--btn-blue);
+            border-radius: 15px; border: none; font-size: 36px; font-weight: 700; color: white;
+        }
+
+        /* 地图卡片 */
+        .map-card {
+            width: 549px; display: flex; flex-direction: column;
+            border: 4px solid var(--yellow); background: white; margin-bottom: 0px; 
+        }
+        .map-header-bar {
+            width: 100%; height: 83px; background: var(--yellow);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 36px; font-weight: 600; color: black; flex-shrink: 0;
+        }
+        .map-view-container { flex: 1; position: relative; overflow: hidden; background: #eee;}
+        .map-img-fit { width: 100%; height: 100%; object-fit: cover; }
+        .btn-show-list-float {
+            position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+            width: 90%; height: 80px; background: var(--btn-blue);
+            font-size: 28px; font-weight: 600; color: white;
+            border-radius: 15px; border: none;
+        }
+
+        /* Bus List Styling (Detailed Fix) */
+        .list-container { background: white; flex: 1; padding: 30px 20px; overflow-y: auto; }
+        .stop-row { 
+            display: flex; margin-bottom: 25px; align-items: center; 
+            min-height: 40px; position: relative;
+        }
+        .stop-time { width: 80px; font-size: 20px; font-weight: 500; text-align: right; margin-right: 20px; color: #333; flex-shrink: 0;}
         
-        .search-btn-center { 
-            background: var(--yellow); padding: 10px 40px; border-radius: 6px; font-size: 18px; 
-            margin-top: 15px; margin-bottom: 15px; 
-            display: flex; align-items: center; gap: 8px; box-shadow: 0 3px 0px rgba(0,0,0,0.2); 
-        }
+        /* dots alignment column */
+        .stop-visual { width: 40px; display: flex; justify-content: center; position: relative; }
         
-        .keyboard-container { width: 750px; margin-top: auto; margin-bottom: 10px; padding: 5px; }
-        .kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
-        .key { 
-            width: 55px; height: 50px; 
-            background: white; border-radius: 5px; 
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 20px; color: #333; box-shadow: 0 2px 3px rgba(0,0,0,0.3); cursor: pointer; 
-        }
-        .key:active { background: #eee; transform: translateY(2px); }
-        .key-num { height: 40px; background: #f7f9fc; color: #1a3b8e; font-weight: bold; font-size: 18px;}
-        .key-action-blue { background: #1877f2; color: white; width: 80px; font-size: 22px; }
-        .key-gray { background: #d0d3d9; width: 40px; font-size: 14px;}
-        .key-space { flex: 1; max-width: 300px; }
-        .key-backspace { width: 60px; background: #d0d3d9; }
-
-
-        /* =========================================
-           PAGE 3: Details
-           ========================================= */
-        #page-details { background: white; flex: 1; display: flex; flex-direction: column; position: relative; }
-        .details-top-bar { display: flex; padding: 15px 20px 0; align-items: center; background: white; }
-        .route-tab { 
-            padding: 8px 30px; 
-            border-radius: 6px; 
-            font-size: 16px; font-weight: 600; 
-            margin-right: 15px; 
-            background-color: var(--tab-gray); color: #0a1035; 
-            min-width: 100px;
-        }
-        .route-tab.active { background-color: var(--yellow); }
-        .lang-switch-btn { margin-left: auto; background: var(--btn-blue); color: white; padding: 8px 20px; border-radius: 6px; font-size: 14px; }
-
-        .details-content { display: flex; flex: 1; padding: 20px; gap: 20px; }
-        .left-panel { flex: 63; display: flex; flex-direction: column; }
-
-        .top-info-block { display: flex; gap: 15px; margin-bottom: 20px; height: 100px; }
+        .stop-dot-big { width: 31px; height: 31px; border-radius: 50%; background: var(--yellow); z-index: 2; }
+        .stop-dot-small { width: 16px; height: 16px; border-radius: 50%; background: var(--yellow); z-index: 2; }
         
-        .bus-name-box { 
-            flex: 4; 
-            background: var(--bg-beige); 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 42px; 
-            font-weight: 700; 
-            color: var(--text-dark); 
+        .stop-line-v { 
+            position: absolute; top: 30px; bottom: -35px; left: 50%; transform: translateX(-50%);
+            width: 4px; background: #ccc; z-index: 1; 
         }
+        .stop-row:last-child .stop-line-v { display: none; }
+
+        .stop-text-bold { font-size: 24px; font-weight: 700; color: black; margin-left: 15px; }
+        .stop-text-reg { font-size: 20px; font-weight: 400; color: #333; margin-left: 15px; }
+
+        /* Modal & Print & Success */
+        .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; justify-content: center; align-items: center; }
+        .modal-box { width: 1700px; height: 1000px; background: white; position: relative; }
+        .btn-modal-back { position: absolute; top: 30px; right: 30px; width: 180px; height: 50px; background: var(--btn-blue); color: white; border-radius: 50px; font-size: 24px; font-weight: 600; border: none; z-index: 10; }
         
-        .bus-times-col { flex: 6; display: flex; flex-direction: column; justify-content: space-between; }
-        .time-row { background: var(--bg-beige); height: 47%; border-radius: 8px; display: flex; align-items: center; padding-left: 15px; font-size: 16px; color: #000; font-weight: 500;}
-
-        .route-block { margin-bottom: 20px; }
-        .labels-row { display: flex; justify-content: space-between; padding: 0 5px; margin-bottom: 5px; font-size: 18px; font-weight: 600; color: var(--btn-blue); }
-        .labels-row span:last-child { width: 42%; }
-        .inputs-row { display: flex; align-items: center; justify-content: space-between; }
-        .location-field { width: 42%; background: var(--bg-beige); padding: 12px; border-radius: 8px; font-size: 14px; font-weight: 500; color: #000; }
-        .stops-middle { text-align: center; font-weight: 600; font-size: 14px; display: flex; flex-direction: column; align-items: center; }
-        .stops-underline { width: 40px; height: 2px; background: #000; margin-top: 2px; }
-
-        .info-message { background: var(--bg-beige); padding: 12px; border-radius: 8px; font-size: 16px; margin-bottom: 10px; color: #000; }
-        .details-actions { margin-top: auto; display: flex; justify-content: space-between; align-items: flex-end; }
-        .btn-back-pill { background: var(--btn-blue); color: white; padding: 10px 40px; border-radius: 40px; font-size: 16px; }
-        .btn-print-rect { background: var(--btn-blue); color: white; padding: 12px 50px; border-radius: 8px; font-size: 20px; }
-
-        .right-panel { flex: 37; border: 2px solid var(--yellow); display: flex; flex-direction: column; position: relative; height: 100%; }
-        .map-header { background: var(--yellow); text-align: center; padding: 8px; font-size: 18px; font-weight: 700; color: black; }
-        .map-area { flex: 1; position: relative; background: #eee; overflow: hidden; cursor: pointer; width: 100%; }
-        .map-area img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .expand-icon { position: absolute; top: 8px; left: 8px; width: 30px; height: 30px; background: var(--btn-blue); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; z-index: 5; pointer-events: none; }
-        .btn-show-list { position: absolute; bottom: 15px; left: 5%; width: 90%; background: var(--btn-blue); color: white; padding: 10px; font-size: 14px; border-radius: 6px; z-index: 10; }
-
-        /* List View */
-        .list-view-container { background: white; flex: 1; padding: 15px 10px; overflow-y: auto; }
-        .stop-item { display: flex; margin-bottom: 12px; position: relative; align-items: center; }
-        .stop-time { font-weight: 500; width: 40px; text-align: right; margin-right: 10px; color: #333; font-size: 12px;}
-        .stop-line { position: absolute; left: 58px; top: 15px; bottom: -20px; width: 2px; background: #5572a5; z-index: 1;}
-        .stop-item:last-child .stop-line { display: none; }
-        .stop-dot-small { width: 6px; height: 6px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: 3px; }
-        .stop-dot-large { width: 12px; height: 12px; background: var(--yellow); border-radius: 50%; position: relative; z-index: 2; left: 0px; }
-        .stop-name { margin-left: 10px; font-size: 13px; color: #333; line-height: 1.2; }
-        .stop-highlight { font-weight: 700; font-size: 14px; color: black; }
-        .stop-end { font-weight: 700; font-size: 15px; color: var(--purple-end); }
-
-        /* Modal & Print */
-        .modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 100; display: flex; justify-content: center; align-items: center; }
-        .modal-body { width: 90%; height: 90%; background: white; position: relative; }
-        .close-btn { position: absolute; top: 10px; right: 10px; background: var(--btn-blue); color: white; padding: 8px 20px; border-radius: 5px; z-index: 200; font-size: 14px;}
-        .center-screen { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;}
-        .loader { border: 6px solid rgba(255,255,255,0.3); border-top: 6px solid var(--yellow); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .center-msg { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background:#1a3b8e; color:white; padding-top: 50px;}
+        .loader { border: 12px solid rgba(255,255,255,0.2); border-top: 12px solid var(--yellow); border-radius: 50%; width: 100px; height: 100px; animation: spin 1.5s linear infinite; margin-bottom: 50px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        #text-printing, #text-wait { font-size: 28px; font-weight: 700; margin: 0; }
-        #text-wait { margin-top: 15px; }
+        
+        #text-printing, #text-wait { font-size: 48px; font-weight: 600; margin: 0; }
+        #text-wait { margin-top: 20px; }
+        
+        #text-coming { font-size: 48px; font-weight: 600; margin-bottom: 80px; margin-top: 30px;}
+        .btn-home {
+            width: 680px; height: 90px;
+            background: var(--yellow);
+            color: black;
+            font-size: 36px; font-weight: 700;
+            border-radius: 90px; border: none;
+        }
 
     </style>
 </head>
@@ -255,165 +267,240 @@
         <div class="top-banner" id="text-banner">Announcement in progress, Bus 4A is leaving in 2 minutes</div>
 
         <div id="page-lang">
-            <div class="header-section">
-                <img src="logo.png" class="logo-img" alt="Brantford Transit" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
-                <div class="logo-text-backup logo-container"><div class="logo-text-group"><span class="logo-small">Brantford</span><span class="logo-big">TRANSIT</span></div><span class="logo-icon">🚌</span></div>
-                <div class="subtitle" id="text-lang-subtitle">Please choose your preferred language</div>
+            <div class="p1-header">
+                <img src="logo.png" class="logo-img-large" alt="Brantford Transit" onerror="this.style.display='none'">
+                <div class="subtitle-large" id="text-lang-sub">Please choose your preferred language</div>
             </div>
             <div class="lang-grid" id="lang-grid">
-                <button class="btn lang-btn active" id="lang-en" onclick="selectLang('en')">English</button>
-                <button class="btn lang-btn" id="lang-fr" onclick="selectLang('fr')">Français</button>
-                <button class="btn lang-btn" id="lang-zh" onclick="selectLang('zh')">中文</button>
-                <button class="btn lang-btn" id="lang-es" onclick="selectLang('es')">Español</button>
-                <button class="btn lang-btn" id="lang-pa" onclick="selectLang('pa')">ਪੰਜਾਬੀ</button>
-                <button class="btn lang-btn" id="lang-tl" onclick="selectLang('tl')">Tagalog</button>
+                <button class="lang-btn active" onclick="setLang('en')">English</button>
+                <button class="lang-btn" onclick="setLang('fr')">Français</button>
+                <button class="lang-btn" onclick="setLang('zh')">中文</button>
+                <button class="lang-btn" onclick="setLang('es')">Español</button>
+                <button class="lang-btn" onclick="setLang('pa')">ਪੰਜਾਬੀ</button>
+                <button class="lang-btn" onclick="setLang('tl')">Tagalog</button>
             </div>
         </div>
 
         <div id="page-search" class="hidden">
-            <button class="btn top-right-lang-btn" onclick="reset()">Language</button>
-            <div class="header-section">
-                <img src="logo.png" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
-                <div class="logo-text-backup logo-container"><div class="logo-text-group"><span class="logo-small">Brantford</span><span class="logo-big">TRANSIT</span></div><span class="logo-icon">🚌</span></div>
-                <div class="subtitle" id="text-search-subtitle">Enter your destination to see which bus to take</div>
+            <img src="logo.png" class="p2-logo" alt="Logo">
+            <button class="btn-lang-small" onclick="reset()">Language</button>
+
+            <div class="p2-center-content">
+                <div class="p2-subtitle" id="text-search-sub">Enter your destination to see which bus to take<br>and where to board.</div>
+                
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" autofocus>
+                    <span class="mic-icon" style="font-size: 36px; color:#666;"></span>
+                </div>
+
+                <button class="btn-search-main" onclick="goToDetails()" id="btn-search">Search Route ➜</button>
             </div>
-            <div class="search-bar-wrapper">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="search-input" placeholder="" autofocus>
-                <span class="mic-icon">🎤</span>
-            </div>
-            <button class="btn search-btn-center" onclick="goToDetails()" id="btn-search">Search Route ➜</button>
-            <div class="keyboard-container">
-                <div class="kb-row"><div class="key key-num" onclick="typeKey('1')">1</div><div class="key key-num" onclick="typeKey('2')">2</div><div class="key key-num" onclick="typeKey('3')">3</div><div class="key key-num" onclick="typeKey('4')">4</div><div class="key key-num" onclick="typeKey('5')">5</div><div class="key key-num" onclick="typeKey('6')">6</div><div class="key key-num" onclick="typeKey('7')">7</div><div class="key key-num" onclick="typeKey('8')">8</div><div class="key key-num" onclick="typeKey('9')">9</div><div class="key key-num" onclick="typeKey('0')">0</div></div>
-                <div class="kb-row"><div class="key" onclick="typeKey('q')">q</div><div class="key" onclick="typeKey('w')">w</div><div class="key" onclick="typeKey('e')">e</div><div class="key" onclick="typeKey('r')">r</div><div class="key" onclick="typeKey('t')">t</div><div class="key" onclick="typeKey('y')">y</div><div class="key" onclick="typeKey('u')">u</div><div class="key" onclick="typeKey('i')">i</div><div class="key" onclick="typeKey('o')">o</div><div class="key" onclick="typeKey('p')">p</div><div class="key key-backspace" onclick="typeKey('backspace')">⌫</div></div>
-                <div class="kb-row"><div class="key" onclick="typeKey('a')">a</div><div class="key" onclick="typeKey('s')">s</div><div class="key" onclick="typeKey('d')">d</div><div class="key" onclick="typeKey('f')">f</div><div class="key" onclick="typeKey('g')">g</div><div class="key" onclick="typeKey('h')">h</div><div class="key" onclick="typeKey('j')">j</div><div class="key" onclick="typeKey('k')">k</div><div class="key" onclick="typeKey('l')">l</div><div class="key key-action-blue" onclick="goToDetails()">↵</div></div>
-                <div class="kb-row"><div class="key key-gray">⇧</div><div class="key" onclick="typeKey('z')">z</div><div class="key" onclick="typeKey('x')">x</div><div class="key" onclick="typeKey('c')">c</div><div class="key" onclick="typeKey('v')">v</div><div class="key" onclick="typeKey('b')">b</div><div class="key" onclick="typeKey('n')">n</div><div class="key" onclick="typeKey('m')">m</div><div class="key" onclick="typeKey(',')">,</div><div class="key" onclick="typeKey('.')">.</div><div class="key key-gray">⇧</div></div>
-                <div class="kb-row"><div class="key key-gray">?123</div><div class="key key-gray">🌐</div><div class="key key-space" onclick="typeKey(' ')"></div><div class="key key-gray">⌨️</div></div>
+
+            <div class="keyboard-wrapper">
+                <div class="kb-row">
+                    <button class="key" onclick="typeKey('1')">1</button>
+                    <button class="key" onclick="typeKey('2')">2</button>
+                    <button class="key" onclick="typeKey('3')">3</button>
+                    <button class="key" onclick="typeKey('4')">4</button>
+                    <button class="key" onclick="typeKey('5')">5</button>
+                    <button class="key" onclick="typeKey('6')">6</button>
+                    <button class="key" onclick="typeKey('7')">7</button>
+                    <button class="key" onclick="typeKey('8')">8</button>
+                    <button class="key" onclick="typeKey('9')">9</button>
+                    <button class="key" onclick="typeKey('0')">0</button>
+                </div>
+                <div class="kb-row">
+                    <button class="key" onclick="typeKey('q')">q</button>
+                    <button class="key" onclick="typeKey('w')">w</button>
+                    <button class="key" onclick="typeKey('e')">e</button>
+                    <button class="key" onclick="typeKey('r')">r</button>
+                    <button class="key" onclick="typeKey('t')">t</button>
+                    <button class="key" onclick="typeKey('y')">y</button>
+                    <button class="key" onclick="typeKey('u')">u</button>
+                    <button class="key" onclick="typeKey('i')">i</button>
+                    <button class="key" onclick="typeKey('o')">o</button>
+                    <button class="key" onclick="typeKey('p')">p</button>
+                </div>
+                <div class="kb-row" style="padding: 0 60px;">
+                    <button class="key" onclick="typeKey('a')">a</button>
+                    <button class="key" onclick="typeKey('s')">s</button>
+                    <button class="key" onclick="typeKey('d')">d</button>
+                    <button class="key" onclick="typeKey('f')">f</button>
+                    <button class="key" onclick="typeKey('g')">g</button>
+                    <button class="key" onclick="typeKey('h')">h</button>
+                    <button class="key" onclick="typeKey('j')">j</button>
+                    <button class="key" onclick="typeKey('k')">k</button>
+                    <button class="key" onclick="typeKey('l')">l</button>
+                    <button class="key key-enter" onclick="goToDetails()">
+                        <svg class="key-icon key-icon-white" viewBox="0 0 24 24" style="transform: scaleX(-1);"><path d="M19 7v4H5.83l3.58-3.59L8 6l-6 6 6 6 1.41-1.41L5.83 13H21V7z"/></svg>
+                    </button>
+                </div>
+                <div class="kb-row">
+                    <button class="key key-func">
+                        <svg class="key-icon" viewBox="0 0 24 24"><path d="M11.99 2.01L2 12h6v8h8v-8h6L11.99 2.01zM18 20H6v2h12v-2z"/></svg>
+                    </button>
+                    <button class="key" onclick="typeKey('z')">z</button>
+                    <button class="key" onclick="typeKey('x')">x</button>
+                    <button class="key" onclick="typeKey('c')">c</button>
+                    <button class="key" onclick="typeKey('v')">v</button>
+                    <button class="key" onclick="typeKey('b')">b</button>
+                    <button class="key" onclick="typeKey('n')">n</button>
+                    <button class="key" onclick="typeKey('m')">m</button>
+                    <button class="key key-func" onclick="typeKey('backspace')">
+                        <svg class="key-icon" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg>
+                    </button>
+                </div>
+                <div class="kb-row">
+                    <button class="key key-func" style="width:160px; font-size: 28px;">.?123</button>
+                    <button class="key key-func">
+                         <svg class="key-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56-.6 1.11-1.06 2.31-1.38 3.56zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.34.16-2h4.68c.09.66.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+                    </button>
+                    <button class="key key-space" onclick="typeKey(' ')"></button>
+                    <button class="key key-func" style="width:160px;">
+                        <svg class="key-icon" viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+                    </button>
+                </div>
             </div>
         </div>
 
         <div id="page-details" class="hidden">
-            <div class="details-top-bar">
-                <button id="btn-route-1" class="btn route-tab active" onclick="switchRoute(1)">Route 1</button>
-                <button id="btn-route-2" class="btn route-tab" onclick="switchRoute(2)">Route 2</button>
-                <button id="btn-route-3" class="btn route-tab" onclick="switchRoute(3)">Route 3</button>
-                <button class="btn lang-switch-btn" onclick="reset()">Language</button>
-            </div>
+            <div class="info-card">
+                <div class="card-header-row">
+                    <button id="btn-r1" class="tab-route active" onclick="switchRoute(1)">Route 1</button>
+                    <button id="btn-r2" class="tab-route" onclick="switchRoute(2)">Route 2</button>
+                    <button id="btn-r3" class="tab-route" onclick="switchRoute(3)">Route 3</button>
+                    <button class="btn-lang-p3" onclick="reset()">Language</button>
+                </div>
 
-            <div class="details-content">
-                <div class="left-panel">
-                    <div class="top-info-block">
-                        <div id="bus-name-box" class="bus-name-box">Bus A</div>
-                        <div class="bus-times-col">
-                            <div class="time-row"><span id="lbl-duration">Trip Duration:</span> &nbsp;<b>20 min</b></div>
-                            <div class="time-row"><span id="lbl-arrives">Bus Arrives:</span> &nbsp;<b>In 10min (At 15:00)</b></div>
-                        </div>
-                    </div>
-
-                    <div class="route-block">
-                        <div class="labels-row"><span id="lbl-from">From</span><span id="lbl-to">To</span></div>
-                        <div class="inputs-row">
-                            <div class="location-field">Terminal platform</div>
-                            <div class="stops-middle"><div>10 Stops</div><div class="stops-underline"></div></div>
-                            <div id="location-to" class="location-field">Edmondson St</div>
-                        </div>
-                    </div>
-
-                    <div class="info-message"><span id="lbl-stop-after">Your Stop is after</span> - <b>Shellard Ln at Sinden Rd</b></div>
-                    <div class="info-message"><span id="lbl-dest">Your Destination:</span> &nbsp;<b id="dest-text">Edmondson St</b></div>
-
-                    <div class="details-actions">
-                        <button class="btn btn-back-pill" onclick="goToSearch()" id="btn-back">Back</button>
-                        <button class="btn btn-print-rect" onclick="goPrint()" id="btn-print">Print</button>
+                <div class="top-info-group">
+                    <div id="bus-id" class="box-bus-id">Bus A</div>
+                    <div class="box-times-col">
+                        <div class="info-strip"><span id="lbl-dur">Trip Duration:</span> &nbsp;20 min</div>
+                        <div class="info-strip"><span id="lbl-arr">Bus Arrives:</span> &nbsp;At 15:00</div>
                     </div>
                 </div>
 
-                <div id="right-panel-container" class="right-panel">
-                    <div id="map-header-container" class="map-header">Bus A</div>
-                    <div id="view-map" class="map-area" onclick="openModal()">
-                        <div class="expand-icon">⤢</div>
-                        <img id="main-map-img" src="map_route1.jpg" alt="Map View" onerror="this.parentNode.innerHTML='<div style=\'padding:20px; text-align:center\'>⚠️ Image not found<br>Please check file names.</div>'">
-                        <button class="btn btn-show-list" onclick="event.stopPropagation(); toggleMapList('list')" id="btn-show-list">Show Bus Line List</button>
+                <div class="route-container">
+                    <div class="route-labels-row">
+                        <div class="label-from" id="lbl-from">From</div>
+                        <div class="label-to" id="lbl-to">To</div>
                     </div>
-                    
-                    <div id="view-list" class="list-view-container hidden">
-                         <div class="stop-item"><div class="stop-time">15:00</div><div class="stop-dot-large"></div><div class="stop-line"></div><div class="stop-name stop-highlight">Terminal platform</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Colborne St West at Gilkison St</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Colborne St West at Oak St</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Colborne St West at Norwich St</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Colborne St West at Sherwood Dr</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Colborne St W at Spalding Dr</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Shellard Ln at St. Patrick's Dr</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Shellard Ln at Killarney St</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Assumption College</div></div>
-                         <div class="stop-item"><div class="stop-time">15:15</div><div class="stop-dot-small"></div><div class="stop-line"></div><div class="stop-name">Shellard Ln at Sinden Rd</div></div>
-                         <div class="stop-item"><div class="stop-time">15:30</div><div class="stop-dot-large"></div><div class="stop-name stop-end">Edmondson St</div></div>
-                         <button class="btn btn-back-pill" style="width:100%; margin-top:10px; font-size:14px; padding:8px;" onclick="toggleMapList('map')" id="btn-back-map">Back to Map</button>
+                    <div class="route-inputs-row">
+                        <div class="info-strip input-box-loc">Terminal Platform</div>
+                        <div class="stops-arrow-container">
+                            <span style="font-size:24px; font-weight:600;">10 Stops</span>
+                            <div class="line-arrow-graphic"></div>
+                        </div>
+                        <div id="loc-to" class="info-strip input-box-loc">Edmondson St</div>
                     </div>
+                </div>
+
+                <div class="info-strip msg-spacer"><span id="lbl-after">Your Stop is after</span> - Shellard Ln at Sinden Rd</div>
+                <div class="info-strip msg-spacer"><span id="lbl-dest">Your Destination:</span> &nbsp;<b id="text-dest" style="margin-left:10px;">Edmondson St</b></div>
+
+                <div class="action-row-bottom">
+                    <button class="btn-back-yellow" id="btn-back" onclick="goToSearch()">Back</button>
+                    <button class="btn-print-blue" id="btn-print" onclick="goPrint()">Print</button>
+                </div>
+            </div>
+
+            <div id="panel-right" class="map-card">
+                <div id="header-map" class="map-header-bar">Bus A</div>
+                <div id="map-view" class="map-view-container" onclick="openModal()">
+                    <img id="img-map-sm" class="map-img-fit" src="map_route1.jpg" alt="Map">
+                    <button class="btn-show-list-float" id="btn-list" onclick="event.stopPropagation(); toggleList()">Show Bus Line List</button>
+                </div>
+                <div id="list-view" class="list-container hidden">
+                    <div class="stop-row"><div class="stop-time">15:00</div><div class="stop-visual"><div class="stop-dot-big"></div><div class="stop-line-v"></div></div><div class="stop-text-bold">Terminal platform</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Colborne St West at Gilkison St</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Colborne St West at Oak St</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Colborne St West at Norwich St</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Colborne St West at Sherwood Dr</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Colborne St W at Spalding Dr</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Shellard Ln at St. Patrick's Dr</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Shellard Ln at Killarney St</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Assumption College</div></div>
+                    <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Shellard Ln at Sinden Rd</div></div>
+                    <div class="stop-row"><div class="stop-time">15:30</div><div class="stop-visual"><div class="stop-dot-big"></div></div><div class="stop-text-bold">Shellard Ln at Anderson Rd</div></div>
+                    <button class="btn-back-yellow" id="btn-back-map" style="width:100%; margin-top:30px;" onclick="toggleList()">Back to Map</button>
                 </div>
             </div>
         </div>
 
-        <div id="page-modal" class="modal hidden">
-            <div class="modal-body">
-                <button class="btn close-btn" onclick="closeModal()" id="btn-modal-back">Back</button>
-                <img id="modal-map-img" src="map_route1_big.jpg" style="width:100%; height:100%; object-fit: cover;" onerror="this.alt='Image not found.'">
+        <div id="page-modal" class="modal-overlay hidden">
+            <div class="modal-box">
+                <button class="btn-modal-back" onclick="closeModal()">Back</button>
+                <img id="img-map-lg" src="map_route1_big.jpg" style="width:100%; height:100%; object-fit:cover;">
             </div>
         </div>
-        <div id="page-print" class="center-screen hidden">
-             <img src="logo.png" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
-             <div class="logo-text-backup logo-container" style="margin-bottom: 30px;"><div class="logo-text-group"><span class="logo-small">Brantford</span><span class="logo-big">TRANSIT</span></div><span class="logo-icon">🚌</span></div>
-            <div class="loader"></div><h2 id="text-printing">Printing in Progress</h2><p id="text-wait">Please Wait</p>
+
+        <div id="page-print" class="center-msg hidden">
+            <img src="logo.png" class="logo-img-large" style="width:350px; margin-bottom: 30px;">
+            <div class="loader"></div>
+            <div id="text-printing">Printing in Progress</div>
+            <div id="text-wait">Please Wait</div>
         </div>
-        <div id="page-success" class="center-screen hidden">
-             <img src="logo.png" class="logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex'">
-             <div class="logo-text-backup logo-container" style="margin-bottom: 30px;"><div class="logo-text-group"><span class="logo-small">Brantford</span><span class="logo-big">TRANSIT</span></div><span class="logo-icon">🚌</span></div>
-            <h1 style="font-size: 48px; margin-bottom: 40px;" id="text-success">Your Bus is coming!</h1>
-            <button class="btn" style="background:var(--yellow); color:black; padding: 20px 60px; font-size: 24px; border-radius: 8px;" onclick="reset()" id="btn-finish">Finish</button>
+
+        <div id="page-success" class="center-msg hidden">
+            <img src="logo.png" class="logo-img-large" style="width:350px; margin-bottom: 50px;">
+            <div id="text-coming">Your Bus Coming!</div>
+            <button class="btn-home" onclick="reset()">Back to homepage</button>
         </div>
+
     </div>
 
     <script>
         // --- 核心配置 ---
         const translations = {
-            'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take", searchBtn: "Search Route ➜", duration: "Trip Duration:", arrives: "Bus Arrives:", from: "From", to: "To", stopAfter: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", showList: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", success: "Your Bus is coming!", finish: "Finish" },
-            'zh': { banner: "公告正在进行中，4A路公交车将在2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆公交车", searchBtn: "搜索路线 ➜", duration: "行程时间:", arrives: "巴士到达:", from: "从", to: "到", stopAfter: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", showList: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", success: "您的巴士即将到达!", finish: "完成" },
-            'fr': { banner: "Annonce en cours, le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre", searchBtn: "Rechercher un itinéraire ➜", duration: "Durée du trajet:", arrives: "Arrivée du bus:", from: "De", to: "À", stopAfter: "Votre arrêt est après", dest: "Votre destination:", back: "Retour", print: "Imprimer", showList: "Afficher la liste des arrêts", backMap: "Retour à la carte", printing: "Impression en cours", wait: "Veuillez patienter", success: "Votre bus arrive!", finish: "Terminer" },
-            'es': { banner: "Anuncio en curso, el autobús 4A sale en 2 minutos", langSubtitle: "Por favor, elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar", searchBtn: "Buscar Ruta ➜", duration: "Duración del viaje:", arrives: "El autobús llega:", from: "De", to: "A", stopAfter: "Su parada es después de", dest: "Su destino:", back: "Atrás", print: "Imprimir", showList: "Mostrar lista de paradas", backMap: "Volver al mapa", printing: "Imprimiendo en progreso", wait: "Por favor espere", success: "¡Tu autobús ya viene!", finish: "Finalizar" },
-            'pa': { banner: "ਘੋਸ਼ਣਾ ਜਾਰੀ ਹੈ, ਬੱਸ 4A 2 ਮਿੰਟਾਂ ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਇਹ ਦੇਖਣ ਲਈ ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ ਕਿ ਕਿਹੜੀ ਬੱਸ ਲੈਣੀ ਹੈ", searchBtn: "ਰੂਟ ਖੋਜੋ ➜", duration: "ਯਾਤਰਾ ਦੀ ਮਿਆਦ:", arrives: "ਬੱਸ ਪਹੁੰਚਦੀ ਹੈ:", from: "ਤੋਂ", to: "ਨੂੰ", stopAfter: "ਤੁਹਾਡਾ ਸਟਾਪ ਬਾਅਦ ਵਿੱਚ ਹੈ", dest: "ਤੁਹਾਡੀ ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ ਕਰੋ", showList: "ਬੱਸ ਲਾਈਨ ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ ਜਾਓ", printing: "ਪ੍ਰਿੰਟਿੰਗ ਜਾਰੀ ਹੈ", wait: "ਕਿਰਪਾ ਕਰਕੇ ਉਡੀਕ ਕਰੋ", success: "ਤੁਹਾਡੀ ਬੱਸ ਆ ਰਹੀ ਹੈ!", finish: "ਮੁਕੰਮਲ" },
-            'tl': { banner: "Kasalukuyang anunsyo, aalis na ang Bus 4A sa loob ng 2 minuto", langSubtitle: "Mangyaring piliin ang iyong gustong wika", searchSubtitle: "Ilagay ang iyong destinasyon upang makita kung aling bus ang sasakyan", searchBtn: "Maghanap ng Ruta ➜", duration: "Tagal ng Biyahe:", arrives: "Darating ang Bus:", from: "Mula sa", to: "Patungo sa", stopAfter: "Ang iyong hintuan ay pagkatapos ng", dest: "Ang iyong Destinasyon:", back: "Bumalik", print: "I-print", showList: "Ipakita ang Listahan ng Bus", backMap: "Bumalik sa Mapa", printing: "Kasalukuyang Nagpi-print", wait: "Mangyaring Maghintay", success: "Parating na ang iyong Bus!", finish: "Tapusin" }
+            'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
+            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点", to: "目的地", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
+            'fr': { banner: "Annonce : Le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
+            'es': { banner: "Anuncio: El autobús 4A sale en 2 minutos", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
+            'pa': { banner: "ਘੋਸ਼ਣਾ: ਬੱਸ 4A 2 ਮਿੰਟਾਂ ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ", searchBtn: "ਖੋਜ ➜", dur: "ਸਮਾਂ:", arr: "ਪਹੁੰਚਣਾ:", from: "ਤੋਂ", to: "ਨੂੰ", after: "ਬਾਅਦ ਵਿੱਚ", dest: "ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ", list: "ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ", printing: "ਪ੍ਰਿੰਟ ਹੋ ਰਿਹਾ ਹੈ", wait: "ਉਡੀਕ ਕਰੋ", coming: "ਬੱਸ ਆ ਰਹੀ ਹੈ!" },
+            'tl': { banner: "Anunsyo: Aalis ang Bus 4A sa loob ng 2 minuto", langSubtitle: "Piliin ang iyong wika", searchSubtitle: "Ilagay ang iyong destinasyon", searchBtn: "Hanapin ➜", dur: "Tagal:", arr: "Darating:", from: "Mula", to: "Patungo", after: "Pagkatapos ng", dest: "Destinasyon:", back: "Bumalik", print: "I-print", list: "Ipakita ang Listahan", backMap: "Bumalik sa Mapa", printing: "Nagpi-print", wait: "Maghintay", coming: "Parating na ang Bus!" }
         };
 
         const langCodes = ['en', 'fr', 'zh', 'es', 'pa', 'tl'];
         let langIndex = 0; 
+        let currentLang = 'en';
 
-        // 缩放适配逻辑
-        function fitToScreen() {
+        function fit() {
             const app = document.getElementById('app');
-            const targetW = 851; 
-            const targetH = 539;
-            
-            const winW = window.innerWidth;
-            const winH = window.innerHeight;
-            
-            // 计算最大缩放比例 (Contain 模式)
-            const scale = Math.min(winW / targetW, winH / targetH);
-            
+            const scale = Math.min(window.innerWidth/1920, window.innerHeight/1200);
             app.style.transform = `scale(${scale})`;
         }
-        window.addEventListener('resize', fitToScreen);
-        window.addEventListener('load', fitToScreen);
+        window.onresize = fit; window.onload = fit;
 
-        function applyTranslations(lang) {
-            const t = translations[lang];
-            const ids = { 'text-banner': t.banner, 'text-lang-subtitle': t.langSubtitle, 'text-search-subtitle': t.searchSubtitle, 'btn-search': t.searchBtn, 'lbl-duration': t.duration, 'lbl-arrives': t.arrives, 'lbl-from': t.from, 'lbl-to': t.to, 'lbl-stop-after': t.stopAfter, 'lbl-dest': t.dest, 'btn-back': t.back, 'btn-print': t.print, 'btn-show-list': t.showList, 'btn-back-map': t.backMap, 'btn-modal-back': t.back, 'text-printing': t.printing, 'text-wait': t.wait, 'text-success': t.success, 'btn-finish': t.finish };
-            for(let id in ids) document.getElementById(id).innerText = ids[id];
+        function applyTranslations(code) {
+            currentLang = code;
+            const t = translations[code];
+            document.getElementById('text-banner').innerText = t.banner;
+            document.getElementById('text-lang-sub').innerText = t.langSubtitle;
+            document.getElementById('text-search-sub').innerHTML = t.searchSubtitle; // use innerHTML for <br>
+            document.getElementById('btn-search').innerText = t.searchBtn;
+            
+            document.getElementById('lbl-dur').innerText = t.dur;
+            document.getElementById('lbl-arr').innerText = t.arr;
+            document.getElementById('lbl-from').innerText = t.from;
+            document.getElementById('lbl-to').innerText = t.to;
+            document.getElementById('lbl-after').innerText = t.after;
+            document.getElementById('lbl-dest').innerText = t.dest;
+            
+            document.getElementById('btn-back').innerText = t.back;
+            document.getElementById('btn-print').innerText = t.print;
+            document.getElementById('btn-list').innerText = t.list;
+            document.getElementById('btn-back-map').innerText = t.backMap;
+            
+            document.getElementById('text-printing').innerText = t.printing;
+            document.getElementById('text-wait').innerText = t.wait;
+            document.getElementById('text-coming').innerText = t.coming;
         }
 
-        function selectLang(lang) {
-            applyTranslations(lang);
-            langIndex = langCodes.indexOf(lang);
+        function setLang(code) {
+            langIndex = langCodes.indexOf(code);
             updateLangHighlight();
+            applyTranslations(code);
             goToSearch();
         }
 
@@ -428,15 +515,19 @@
         function show(id) { document.querySelectorAll('#app > div[id^="page-"]').forEach(el => el.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
         function goToSearch() { show('page-search'); document.getElementById('search-input').focus(); }
         function goToDetails() { show('page-details'); }
-        function goPrint() { show('page-print'); setTimeout(() => { show('page-success'); }, 3000); }
+        function goPrint() { show('page-print'); setTimeout(()=>show('page-success'),3000); }
         
         function reset() { 
-            document.getElementById('search-input').value = ''; 
+            document.getElementById('search-input').value=''; 
             switchRoute(1); 
-            toggleMapList('map'); 
-            applyTranslations('en');
+            document.getElementById('list-view').classList.add('hidden');
+            document.getElementById('map-view').classList.remove('hidden');
+            
+            // Reset Lang
             langIndex = 0;
+            applyTranslations('en');
             updateLangHighlight();
+            
             show('page-lang'); 
         }
         
@@ -453,7 +544,7 @@
                 if (e.key === 'ArrowLeft') { langIndex = (langIndex - 1 + 6) % 6; updateLangHighlight(); }
                 if (e.key === 'ArrowDown') { if (langIndex + 3 < 6) langIndex += 3; updateLangHighlight(); }
                 if (e.key === 'ArrowUp') { if (langIndex - 3 >= 0) langIndex -= 3; updateLangHighlight(); }
-                if (e.key === 'Enter') { selectLang(langCodes[langIndex]); }
+                if (e.key === 'Enter') { setLang(langCodes[langIndex]); }
                 return;
             }
             if (!document.getElementById('page-search').classList.contains('hidden')) {
@@ -468,42 +559,33 @@
             }
         });
 
-        let currentRoute = 1;
-        function switchRoute(routeNum) {
-            if (currentRoute === routeNum) return; 
-            currentRoute = routeNum;
-            document.querySelectorAll('.route-tab').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`btn-route-${routeNum}`).classList.add('active');
-
-            const busName = document.getElementById('bus-name-box');
-            const locTo = document.getElementById('location-to');
-            const destText = document.getElementById('dest-text');
-            const mapHeader = document.getElementById('map-header-container'); 
-            const rightPanel = document.getElementById('right-panel-container'); 
-            const mapImg = document.getElementById('main-map-img');
-            const modalImg = document.getElementById('modal-map-img');
-
+        function switchRoute(n) {
+            [1,2,3].forEach(i => document.getElementById(`btn-r${i}`).classList.remove('active'));
+            document.getElementById(`btn-r${n}`).classList.add('active');
+            
             const data = {
-                1: { name: 'Bus A', dest: 'Edmondson St', color: '#fecb2f', img: 'map_route1.jpg', imgBig: 'map_route1_big.jpg' },
-                2: { name: 'Bus 4C', dest: 'Lynden Park Mall', color: '#F191F0', img: 'map_route2.jpg', imgBig: 'map_route2_big.jpg' },
-                3: { name: 'Bus 2', dest: 'Brantford Station', color: '#F29900', img: 'map_route3.jpg', imgBig: 'map_route3_big.jpg' }
+                1: { id:'Bus A', dest:'Edmondson St', col:'#FFCD00', img:'map_route1.jpg', big:'map_route1_big.jpg'},
+                2: { id:'Bus 4C', dest:'Lynden Park Mall', col:'#F191F0', img:'map_route2.jpg', big:'map_route2_big.jpg'},
+                3: { id:'Bus 2', dest:'Brantford Station', col:'#F29900', img:'map_route3.jpg', big:'map_route3_big.jpg'}
             };
-
-            const current = data[routeNum];
-            busName.innerText = current.name;
-            locTo.innerText = current.dest;
-            destText.innerText = current.dest;
-            mapHeader.innerText = current.name;
-            mapHeader.style.backgroundColor = current.color;
-            rightPanel.style.borderColor = current.color;
-            mapImg.src = current.img;
-            modalImg.src = current.imgBig;
-            toggleMapList('map');
+            const d = data[n];
+            document.getElementById('bus-id').innerText = d.id;
+            document.getElementById('loc-to').innerText = d.dest;
+            document.getElementById('text-dest').innerText = d.dest;
+            
+            const head = document.getElementById('header-map');
+            head.innerText = d.id;
+            head.style.backgroundColor = d.col;
+            document.getElementById('panel-right').style.borderColor = d.col;
+            document.getElementById('img-map-sm').src = d.img;
+            document.getElementById('img-map-lg').src = d.big;
         }
 
-        function toggleMapList(mode) { 
-            if (mode === 'list') { document.getElementById('view-map').classList.add('hidden'); document.getElementById('view-list').classList.remove('hidden'); } 
-            else { document.getElementById('view-list').classList.add('hidden'); document.getElementById('view-map').classList.remove('hidden'); }
+        function toggleList() {
+            const list = document.getElementById('list-view');
+            const map = document.getElementById('map-view');
+            if(list.classList.contains('hidden')) { list.classList.remove('hidden'); map.classList.add('hidden'); }
+            else { list.classList.add('hidden'); map.classList.remove('hidden'); }
         }
         function openModal() { document.getElementById('page-modal').classList.remove('hidden'); }
         function closeModal() { document.getElementById('page-modal').classList.add('hidden'); }
