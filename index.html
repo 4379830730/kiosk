@@ -53,6 +53,8 @@
             display: flex; align-items: center; justify-content: center;
             font-weight: 700; font-size: 32px; 
             width: 100%; z-index: 10; flex-shrink: 0;
+            /* 保持文字单行 */
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 
         /* --- Page 1: 语言页 --- */
@@ -207,15 +209,9 @@
         .map-view-container { flex: 1; position: relative; overflow: hidden; background: #eee;}
         .map-img-fit { width: 100%; height: 100%; object-fit: cover; }
         
-        /* 修改：地图放大图标样式，精确尺寸 47x48 */
         .map-expand-icon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 47px; 
-            height: 48px;
-            z-index: 10;
-            pointer-events: none; 
+            position: absolute; top: 10px; right: 10px;
+            width: 58px; height: 58px; z-index: 10; pointer-events: none; 
         }
 
         .btn-show-list-float {
@@ -225,7 +221,7 @@
             border-radius: 15px; border: none;
         }
 
-        /* Bus List Styling */
+        /* List View */
         .list-container { background: white; flex: 1; padding: 30px 20px; overflow-y: auto; }
         .stop-row { display: flex; margin-bottom: 25px; align-items: center; min-height: 40px; position: relative; }
         .stop-time { width: 80px; font-size: 20px; font-weight: 500; text-align: right; margin-right: 20px; color: #333; flex-shrink: 0;}
@@ -412,7 +408,7 @@
                     <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Shellard Ln at Killarney St</div></div>
                     <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Assumption College</div></div>
                     <div class="stop-row"><div class="stop-time">15:15</div><div class="stop-visual"><div class="stop-dot-small"></div><div class="stop-line-v"></div></div><div class="stop-text-reg">Shellard Ln at Sinden Rd</div></div>
-                    <div class="stop-row"><div class="stop-time">15:30</div><div class="stop-visual"><div class="stop-dot-big"></div></div><div class="stop-text-bold">Shellard Ln at Anderson Rd</div></div>
+                    <div class="stop-row"><div class="stop-time">15:30</div><div class="stop-visual"><div class="stop-dot-big"></div></div><div class="stop-text-bold" style="color:var(--purple-end)">Shellard Ln at Anderson Rd</div></div>
                     <button class="btn-back-yellow" id="btn-back-map" style="width:100%; margin-top:30px;" onclick="toggleList()">Back to Map</button>
                 </div>
             </div>
@@ -441,19 +437,45 @@
     </div>
 
     <script>
-        // --- 核心配置 ---
+        // --- 倒计时逻辑 ---
+        let countdownMin = 2;
+        let countdownSec = 0;
+        let currentLang = 'en';
+
+        // 占位符：{time}
         const translations = {
-            'en': { banner: "Announcement in progress, Bus 4A is leaving in 2 minutes", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
-            'zh': { banner: "公告：4A路公交车将于2分钟后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点站", to: "目的站", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
-            'fr': { banner: "Annonce : Le bus 4A part dans 2 minutes", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
-            'es': { banner: "Anuncio: El autobús 4A sale en 2 minutos", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
-            'pa': { banner: "ਘੋਸ਼ਣਾ: ਬੱਸ 4A 2 ਮਿੰਟਾਂ ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ", searchBtn: "ਖੋਜ ➜", dur: "ਸਮਾਂ:", arr: "ਪਹੁੰਚਣਾ:", from: "ਤੋਂ", to: "ਨੂੰ", after: "ਬਾਅਦ ਵਿੱਚ", dest: "ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ", list: "ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ", printing: "ਪ੍ਰਿੰਟ ਹੋ ਰਿਹਾ ਹੈ", wait: "ਉਡੀਕ ਕਰੋ", coming: "ਬੱਸ ਆ ਰਹੀ ਹੈ!" },
-            'tl': { banner: "Anunsyo: Aalis ang Bus 4A sa loob ng 2 minuto", langSubtitle: "Piliin ang iyong wika", searchSubtitle: "Ilagay ang iyong destinasyon", searchBtn: "Hanapin ➜", dur: "Tagal:", arr: "Darating:", from: "Mula", to: "Patungo", after: "Pagkatapos ng", dest: "Destinasyon:", back: "Bumalik", print: "I-print", list: "Ipakita ang Listahan", backMap: "Bumalik sa Mapa", printing: "Nagpi-print", wait: "Maghintay", coming: "Parating na ang Bus!" }
+            'en': { banner: "Announcement in progress, Bus 4A is leaving in {time}", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!" },
+            'zh': { banner: "公告：4A路公交车将于 {time} 后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点站", to: "目的站", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！" },
+            'fr': { banner: "Annonce : Le bus 4A part dans {time}", langSubtitle: "Veuillez choisir votre langue préférée", searchSubtitle: "Entrez votre destination pour voir quel bus prendre<br>et où embarquer.", searchBtn: "Rechercher ➜", dur: "Durée:", arr: "Arrivée:", from: "De", to: "À", after: "Votre arrêt est après", dest: "Votre Destination:", back: "Retour", print: "Imprimer", list: "Voir la liste", backMap: "Retour carte", printing: "Impression en cours", wait: "Veuillez patienter", coming: "Votre bus arrive !" },
+            'es': { banner: "Anuncio: El autobús 4A sale en {time}", langSubtitle: "Elija su idioma preferido", searchSubtitle: "Ingrese su destino para ver qué autobús tomar<br>y dónde abordar.", searchBtn: "Buscar Ruta ➜", dur: "Duración:", arr: "Llegada:", from: "De", to: "A", after: "Su parada es después de", dest: "Su Destino:", back: "Atrás", print: "Imprimir", list: "Ver lista", backMap: "Volver al mapa", printing: "Imprimiendo", wait: "Por favor espere", coming: "¡Tu autobús viene!" },
+            'pa': { banner: "ਘੋਸ਼ਣਾ: ਬੱਸ 4A {time} ਵਿੱਚ ਰਵਾਨਾ ਹੋ ਰਹੀ ਹੈ", langSubtitle: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ", searchSubtitle: "ਆਪਣੀ ਮੰਜ਼ਿਲ ਦਰਜ ਕਰੋ", searchBtn: "ਖੋਜ ➜", dur: "ਸਮਾਂ:", arr: "ਪਹੁੰਚਣਾ:", from: "ਤੋਂ", to: "ਨੂੰ", after: "ਬਾਅਦ ਵਿੱਚ", dest: "ਮੰਜ਼ਿਲ:", back: "ਵਾਪਸ", print: "ਪ੍ਰਿੰਟ", list: "ਸੂਚੀ ਦਿਖਾਓ", backMap: "ਨਕਸ਼ੇ 'ਤੇ ਵਾਪਸ", printing: "ਪ੍ਰਿੰਟ ਹੋ ਰਿਹਾ ਹੈ", wait: "ਉਡੀਕ ਕਰੋ", coming: "ਬੱਸ ਆ ਰਹੀ ਹੈ!" },
+            'tl': { banner: "Anunsyo: Aalis ang Bus 4A sa loob ng {time}", langSubtitle: "Piliin ang iyong wika", searchSubtitle: "Ilagay ang iyong destinasyon", searchBtn: "Hanapin ➜", dur: "Tagal:", arr: "Darating:", from: "Mula", to: "Patungo", after: "Pagkatapos ng", dest: "Destinasyon:", back: "Bumalik", print: "I-print", list: "Ipakita ang Listahan", backMap: "Bumalik sa Mapa", printing: "Nagpi-print", wait: "Maghintay", coming: "Parating na ang Bus!" }
         };
 
         const langCodes = ['en', 'fr', 'zh', 'es', 'pa', 'tl'];
         let langIndex = 0; 
-        let currentLang = 'en';
+
+        // 启动倒计时
+        setInterval(() => {
+            if (countdownSec === 0) {
+                if (countdownMin === 0) {
+                    countdownMin = 2; // 循环
+                    countdownSec = 0;
+                } else {
+                    countdownMin--;
+                    countdownSec = 59;
+                }
+            } else {
+                countdownSec--;
+            }
+            updateBanner();
+        }, 1000);
+
+        function updateBanner() {
+            const timeStr = `${countdownMin}m ${countdownSec}s`;
+            const template = translations[currentLang].banner;
+            document.getElementById('text-banner').innerText = template.replace('{time}', timeStr);
+        }
 
         function fit() {
             const app = document.getElementById('app');
@@ -464,8 +486,10 @@
 
         function applyTranslations(code) {
             currentLang = code;
+            updateBanner(); // 立即更新 banner
+            
             const t = translations[code];
-            document.getElementById('text-banner').innerText = t.banner;
+            // 更新其他所有文字
             document.getElementById('text-lang-sub').innerText = t.langSubtitle;
             document.getElementById('text-search-sub').innerHTML = t.searchSubtitle; 
             document.getElementById('btn-search').innerText = t.searchBtn;
@@ -513,7 +537,7 @@
             document.getElementById('list-view').classList.add('hidden');
             document.getElementById('map-view').classList.remove('hidden');
             
-            // Reset Lang
+            // Reset Lang to English
             langIndex = 0;
             applyTranslations('en');
             updateLangHighlight();
@@ -528,7 +552,9 @@
             i.focus(); 
         }
 
+        // 实体键盘交互
         document.addEventListener('keydown', (e) => {
+            // Page 1: 箭头键选语言
             if (!document.getElementById('page-lang').classList.contains('hidden')) {
                 if (e.key === 'ArrowRight') { langIndex = (langIndex + 1) % 6; updateLangHighlight(); }
                 if (e.key === 'ArrowLeft') { langIndex = (langIndex - 1 + 6) % 6; updateLangHighlight(); }
@@ -537,16 +563,27 @@
                 if (e.key === 'Enter') { setLang(langCodes[langIndex]); }
                 return;
             }
+            // Page 2: 正常打字 + 回车
             if (!document.getElementById('page-search').classList.contains('hidden')) {
                 const input = document.getElementById('search-input');
                 input.focus();
                 if (e.key === 'Enter') goToDetails();
                 return;
             }
+            // Page 3: P键打印
             if (!document.getElementById('page-details').classList.contains('hidden')) {
                 if (e.key === 'p' || e.key === 'P') goPrint();
                 return;
             }
+        });
+
+        // 虚拟键盘点击
+        document.querySelectorAll('.key:not(.key-func):not(.key-space):not(.key-enter)').forEach(key => {
+             key.addEventListener('click', function() {
+                 // 获取最后一个文本节点作为输入字符（避开上面的数字角标）
+                 const char = this.childNodes[this.childNodes.length - 1].textContent.trim();
+                 typeKey(char);
+             });
         });
 
         function switchRoute(n) {
