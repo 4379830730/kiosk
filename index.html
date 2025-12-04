@@ -248,7 +248,7 @@
 <body>
 
     <div id="app">
-        <div class="top-banner" id="text-banner">Announcement in progress, Bus 4A is leaving in 2 minutes</div>
+        <div class="top-banner" id="text-banner">Announcement: Bus 4A is leaving in 2m 00s</div>
 
         <div id="page-lang">
             <div class="p1-header">
@@ -440,7 +440,6 @@
         let countdownSec = 0;
         let currentLang = 'en';
 
-        // 占位符：{time}
         const translations = {
             'en': { banner: "Announcement: Bus 4A is leaving in {time}", langSubtitle: "Please choose your preferred language", searchSubtitle: "Enter your destination to see which bus to take<br>and where to board.", searchBtn: "Search Route ➜", dur: "Trip Duration:", arr: "Bus Arrives:", from: "From", to: "To", after: "Your Stop is after", dest: "Your Destination:", back: "Back", print: "Print", list: "Show Bus Line List", backMap: "Back to Map", printing: "Printing in Progress", wait: "Please Wait", coming: "Your Bus Coming!", route1: "Route 1", route2: "Route 2", route3: "Route 3" },
             'zh': { banner: "公告：4A路公交车将于 {time} 后发车", langSubtitle: "请选择您的首选语言", searchSubtitle: "请输入您的目的地以查看乘坐哪辆车<br>以及在哪里上车。", searchBtn: "搜索路线 ➜", dur: "行程时间:", arr: "巴士到达:", from: "起点站", to: "目的站", after: "您的站点在此之后", dest: "您的目的地:", back: "返回", print: "打印", list: "显示站点列表", backMap: "返回地图", printing: "正在打印", wait: "请稍候", coming: "巴士即将到达！", route1: "路线 1", route2: "路线 2", route3: "路线 3" },
@@ -537,9 +536,12 @@
             switchRoute(1); 
             document.getElementById('list-view').classList.add('hidden');
             document.getElementById('map-view').classList.remove('hidden');
+            
+            // Reset Lang
             langIndex = 0;
             applyTranslations('en');
             updateLangHighlight();
+            
             show('page-lang'); 
         }
         
@@ -573,16 +575,16 @@
                 }
                 return;
             }
+            // ADDED: Success Page Delete/Backspace Handler
+            if (!document.getElementById('page-success').classList.contains('hidden')) {
+                 if (e.key === 'Backspace' || e.key === 'Delete') {
+                    reset();
+                }
+                return;
+            }
         });
 
-        // 简单的键盘交互 (仅演示功能)
-        document.querySelectorAll('.key:not(.key-func):not(.key-space):not(.key-enter)').forEach(key => {
-             key.addEventListener('click', function() {
-                 const char = this.childNodes[this.childNodes.length - 1].textContent.trim();
-                 typeKey(char);
-             });
-        });
-
+        let currentRoute = 1;
         function switchRoute(n) {
             [1,2,3].forEach(i => document.getElementById(`btn-r${i}`).classList.remove('active'));
             document.getElementById(`btn-r${n}`).classList.add('active');
