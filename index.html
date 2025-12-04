@@ -536,12 +536,9 @@
             switchRoute(1); 
             document.getElementById('list-view').classList.add('hidden');
             document.getElementById('map-view').classList.remove('hidden');
-            
-            // Reset Lang
             langIndex = 0;
             applyTranslations('en');
             updateLangHighlight();
-            
             show('page-lang'); 
         }
         
@@ -561,12 +558,23 @@
                 if (e.key === 'Enter') { setLang(langCodes[langIndex]); }
                 return;
             }
+            
+            // 搜索页 (Page 2) 键盘监听逻辑更新
             if (!document.getElementById('page-search').classList.contains('hidden')) {
                 const input = document.getElementById('search-input');
                 input.focus();
-                if (e.key === 'Enter') goToDetails();
+                if (e.key === 'Enter') {
+                    goToDetails();
+                } else if (e.key === 'Delete') {
+                    // 按 Delete 键返回语言页
+                    reset();
+                } else if (e.key === 'Backspace' && input.value === '') {
+                     // 只有当输入框为空时，按 Backspace 才返回语言页
+                     reset();
+                }
                 return;
             }
+
             if (!document.getElementById('page-details').classList.contains('hidden')) {
                 if (e.key === 'Enter') {
                     goPrint();
@@ -575,7 +583,7 @@
                 }
                 return;
             }
-            // ADDED: Success Page Delete/Backspace Handler
+            
             if (!document.getElementById('page-success').classList.contains('hidden')) {
                  if (e.key === 'Backspace' || e.key === 'Delete') {
                     reset();
@@ -584,7 +592,6 @@
             }
         });
 
-        let currentRoute = 1;
         function switchRoute(n) {
             [1,2,3].forEach(i => document.getElementById(`btn-r${i}`).classList.remove('active'));
             document.getElementById(`btn-r${n}`).classList.add('active');
